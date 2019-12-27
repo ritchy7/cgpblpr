@@ -4,7 +4,7 @@ import os
 
 def get_env_variable(var_name):
     """
-    Get the environment variable or return exception
+    Get the environment variable or return exception.
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def get_env_variable(var_name):
     Returns
     -------
     : str
-        Value of the Environment variable name.ß
+        Value of the Environment variable name.
     """
     try:
         return os.environ[var_name]
