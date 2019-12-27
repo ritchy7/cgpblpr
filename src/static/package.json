@@ -1,0 +1,20 @@
+{
+  "name": "GrandpyBot",
+  "version": "1.0.0",
+  "description": "Grandpy Bot project frontend",
+  "main": "index.jsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "python",
+    "react",
+    "npm",
+    "webpack"
+  ],
+  "author": "Ritchy Blezin",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.0.0"
+  }
+}
