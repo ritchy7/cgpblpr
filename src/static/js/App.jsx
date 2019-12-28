@@ -1,12 +1,19 @@
 import React, { Component } from "react";
-import Footer from "./footer";
-import Header from "./header";
-import Main from "./main";
+import Footer from "./Footer";
+import Header from "./Header";
+import Main from "./Main";
 
 
 class App extends Component {
     state = {
-        message: ""
+        conversation: []
+    }
+
+    // List all of messages exchange between the human and the bot.
+    handleAdd = message => {
+        const conversation = [...this.state.conversation]
+        conversation.push(message)
+        this.setState({ conversation })
     }
 
     // Show a alert message if trying to change language.
@@ -19,7 +26,11 @@ class App extends Component {
         return (
             <section className="msger">
                 <Header underConstruction={this.handleClick} />
-                <Main underConstruction={this.handleClick} />
+                <Main
+                    onAddToConversation={this.handleAdd}
+                    underConstruction={this.handleClick}
+                    conversation={this.state.conversation}
+                />
                 <Footer underConstruction={this.handleClick} />
             </section>
         )
