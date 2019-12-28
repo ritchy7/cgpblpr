@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 
 const Header = ({ underConstruction }) => (
-    <header>
-        <nav className="global-nav">
-            <ul>
-                <li><a href="#" onClick={underConstruction}>English</a></li>
-                <li><a href="#" onClick={underConstruction}>French</a></li>
-            </ul>
-        </nav>
-        <h1>Grandpy <span className="animated pulse">Bot</span></h1>
+    <header className="msger-header">
+        <div className="msger-header-title">
+            <i className="fas fa-comment-alt"></i> GrandPY - Tchat Bot
+        </div>
+        <div className="msger-header-options">
+            <span><i className="fas fa-cog"></i></span>
+        </div>
     </header>
 )
 
