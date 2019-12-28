@@ -4,7 +4,10 @@
   "description": "Grandpy Bot project frontend",
   "main": "index.jsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "",
+    "dev-build": "",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --progress -d --config webpack.config.js --watch"
   },
   "keywords": [
     "python",
@@ -15,6 +18,22 @@
   "author": "Ritchy Blezin",
   "license": "MIT",
   "devDependencies": {
-    "webpack": "^4.0.0"
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
   }
 }
