@@ -3,7 +3,12 @@ import Footer from "./footer";
 import Header from "./header";
 import Main from "./main";
 
+
 class App extends Component {
+    state = {
+        message: ""
+    }
+
     // Show a alert message if trying to change language.
     handleClick = (event) => {
         event.preventDefault();
@@ -12,11 +17,11 @@ class App extends Component {
 
     render() {
         return (
-            <div>
-                <Header underConstruction={this.handleClick}/>
-                <Main underConstruction={this.handleClick}/>
-                <Footer underConstruction={this.handleClick}/>
-            </div>
+            <section className="msger">
+                <Header underConstruction={this.handleClick} />
+                <Main underConstruction={this.handleClick} />
+                <Footer underConstruction={this.handleClick} />
+            </section>
         )
     }
 }
