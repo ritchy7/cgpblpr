@@ -1,12 +1,36 @@
-import React from "react";
+import React, { Component } from "react";
+import MessageForm from "./MessageForm";
+import Message from "./Message";
 
 
-const Main = ({ underConstruction }) => (
-    <main className="main-intro">
-        <p>Under construction <span className="icon-heart">&#x1F4E7;</span></p>
-        <p className="send"><a href="#" onClick={underConstruction}>Send</a></p>
-    </main>
-)
+class Main extends Component {
+
+    render() {
+        const { underConstruction, onAddToConversation, conversation } = this.props
+        let messages;
+        let no_message;
+
+        if (conversation.length > 1){
+            messages = conversation.map((message) => (
+                <Message message={message}/>
+            ))
+        } else {
+            no_message = <p style={{textAlign: "center"}}>Welcome to GrandPY Bot please ask a question.</p>
+        }
+        return(
+            <div>
+                <main className="msger-chat">
+                    {messages}
+                    {no_message}
+                </main>
+                <MessageForm
+                    onAddToConversation={onAddToConversation}
+                    underConstruction={underConstruction}
+                />
+            </div>
+        )
+    }
+}
 
 
 export default Main;
