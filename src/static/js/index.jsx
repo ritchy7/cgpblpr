@@ -4,5 +4,5 @@ import App from "./App";
 require('../css/grandpy.css')
 
 
-const rootElement = document.getElementById("content");
+const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
