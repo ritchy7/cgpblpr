@@ -6,7 +6,14 @@ import Main from "./Main";
 
 class App extends Component {
     state = {
-        conversation: []
+        conversation: [
+            {
+                "id": 1,
+                "user": "GrandPY",
+                "text": "Bonjour ! Bienvenue sur GrandPY Bot, pose une question relative à un lieu.",
+                "hour": ""
+            }
+        ]
     }
 
     // List all of messages exchange between the human and the bot.
