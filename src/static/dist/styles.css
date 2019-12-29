@@ -156,6 +156,9 @@ body {
 
 .msger-chat {
   background-color: #ffffff;
+  height: 600px;
+  max-height: 600;
+  overflow-y: scroll;
 }
 
 footer {
