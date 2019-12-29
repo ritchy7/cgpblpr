@@ -34,26 +34,23 @@ class SendMessage extends Component {
         })
 
         // Send the message to Flask Background with Axios package.
-        // Wait 2 secondes before show the response.
         // Show a charging color bar beside the input.
         this.setState({show_animation: ""})
-        setTimeout(() => {
-            axios.post('/askbot', {
-                message: message
+        axios.post('/askbot', {
+            message: message
+        })
+        // Get the response.
+        .then((response) => {
+            onAddToConversation({
+                "id": Math.round(Math.random() * 100000),
+                "user": "GrandPY",
+                "text": response.data.message,
+                "hour": current_hours
             })
-            // Get the response.
-            .then((response) => {
-                onAddToConversation({
-                    "id": Math.round(Math.random() * 100000),
-                    "user": "GrandPY",
-                    "text": response.data.message,
-                    "hour": current_hours
-                })
-                this.setState({show_animation: "hidden"})
-            })
-            // Catch errors.
-            .catch((error) => console.log(error));
-        }, 2000);
+            this.setState({show_animation: "hidden"})
+        })
+        // Catch errors.
+        .catch((error) => console.log(error));
         this.setState({ message: "" })
     }
 
