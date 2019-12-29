@@ -7,21 +7,19 @@ class Main extends Component {
 
     render() {
         const { underConstruction, onAddToConversation, conversation } = this.props
-        let messages;
-        let no_message;
-
-        if (conversation.length > 1){
-            messages = conversation.map((message) => (
-                <Message message={message}/>
-            ))
-        } else {
-            no_message = <div style={{textAlign: "center", padding: "20px 0"}}>Welcome to GrandPY Bot<br /> please ask a question.</div>
-        }
         return(
             <div>
                 <main className="msger-chat">
-                    {messages}
-                    {no_message}
+                    // If there a at least one message show them or show
+                    // a message inviting you to ask a question.
+                    {
+                        conversation.length > 1 ?
+                        conversation.map((message) => (<Message message={message}/>))
+                        :
+                        <div style={{textAlign: "center", padding: "20px 0"}}>
+                            Welcome to GrandPY Bot<br /> please ask a question.
+                        </div>
+                    }
                 </main>
                 <MessageForm
                     onAddToConversation={onAddToConversation}
