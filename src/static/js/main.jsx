@@ -15,7 +15,7 @@ class Main extends Component {
                 <Message message={message}/>
             ))
         } else {
-            no_message = <p style={{textAlign: "center", padding: "20px 0"}}>Welcome to GrandPY Bot please ask a question.</p>
+            no_message = <div style={{textAlign: "center", padding: "20px 0"}}>Welcome to GrandPY Bot<br /> please ask a question.</div>
         }
         return(
             <div>
