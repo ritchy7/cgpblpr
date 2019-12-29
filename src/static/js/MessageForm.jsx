@@ -4,8 +4,10 @@ import axios from "axios";
 
 class SendMessage extends Component {
     state = {
-        message: ""
+        message: "",
+        show_animation: "hidden"
     }
+
 
     handleChange = event => {
         // Get the written message.
@@ -21,36 +23,50 @@ class SendMessage extends Component {
         // Get the current year.
         const current_date = new Date()
         const current_hours = ("0" + current_date.getHours()).slice(-2) + ":" + current_date.getMinutes()
+        const message = this.state.message
 
         // Add the user message to the conversation.
         onAddToConversation({
+            "id": Math.round(Math.random() * 100000),
             "user": "Me",
-            "text": this.state.message,
+            "text": message,
             "hour": current_hours
         })
 
         // Send the message to Flask Background with Axios package.
-        axios.post('/askbot', {
-            message: this.state.message
-        })
-        // Get the response.
-        .then(function (response) {
-            onAddToConversation({
-                "user": "GrandPY",
-                "text": response.data.message,
-                "hour": current_hours
+        // Wait 2 secondes before show the response.
+        // Show a charging color bar beside the input.
+        this.setState({show_animation: ""})
+        setTimeout(() => {
+            axios.post('/askbot', {
+                message: message
             })
-        })
-        // Catch errors.
-        .catch(function (error) {
-            console.log(error);
-        });
+            // Get the response.
+            .then((response) => {
+                onAddToConversation({
+                    "id": Math.round(Math.random() * 100000),
+                    "user": "GrandPY",
+                    "text": response.data.message,
+                    "hour": current_hours
+                })
+                this.setState({show_animation: "hidden"})
+            })
+            // Catch errors.
+            .catch((error) => console.log(error));
+        }, 2000);
         this.setState({ message: "" })
     }
 
     render(){
         return (
             <form onSubmit={this.handleSubmit} className="msger-inputarea">
+                <div className="load-wrapp" style={{visibility: this.state.show_animation}}>
+                    <div className="load">
+                        <div className="line"></div>
+                        <div className="line"></div>
+                        <div className="line"></div>
+                    </div>
+                </div>
                 <input
                     onChange={this.handleChange}
                     value={this.state.message}
