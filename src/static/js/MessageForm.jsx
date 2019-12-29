@@ -56,7 +56,7 @@ class SendMessage extends Component {
                     value={this.state.message}
                     type="text"
                     className="msger-input"
-                    placeholder="Write your message..."
+                    placeholder="Ask your question..."
                 />
                 <button type="submit" className="msger-send-btn">Send</button>
             </form>
