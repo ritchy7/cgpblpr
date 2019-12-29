@@ -10,8 +10,8 @@ class Main extends Component {
         return(
             <div>
                 <main className="msger-chat">
-                    // If there a at least one message show them or show
-                    // a message inviting you to ask a question.
+                    {/* If there a at least one message show them or show
+                    a message inviting you to ask a question. */}
                     {
                         conversation.length > 1 ?
                         conversation.map((message) => (<Message message={message}/>))
