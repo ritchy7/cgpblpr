@@ -1,5 +1,6 @@
 # Standard imports.
 import ast
+import time
 
 # Flask imports.
 from flask import (
@@ -28,5 +29,7 @@ def index():
 def ask_bot():
     request_data = ast.literal_eval(request.data.decode('utf-8'))
     print(request_data)
-    response = jsonify({'message': 'hello world'})
+    response = jsonify({'message': request_data['message']})
+    # Add a timer to slow down the bot.
+    time.sleep(2)
     return response
