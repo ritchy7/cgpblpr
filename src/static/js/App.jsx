@@ -18,8 +18,17 @@ class App extends Component {
 
     // List all of messages exchange between the human and the bot.
     handleAdd = message => {
+        // Get all messages.
         const conversation = [...this.state.conversation]
+        // Add the current hour.
+        const current_date = new Date()
+        const current_hour = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2)
+        message["hour"] = current_hour
+        // Add an id to the message.
+        message["id"] = Math.round(Math.random() * 100000)
+        // Put the message to all messages list.
         conversation.push(message)
+        // Replace the messages in the state.
         this.setState({ conversation })
     }
 
