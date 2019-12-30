@@ -22,7 +22,7 @@ class SendMessage extends Component {
         const onAddToConversation = this.props.onAddToConversation
         // Get the current year.
         const current_date = new Date()
-        const current_hours = ("0" + current_date.getHours()).slice(-2) + ":" + current_date.getMinutes()
+        const current_hours = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2)
         const message = this.state.message
 
         // Add the user message to the conversation.
