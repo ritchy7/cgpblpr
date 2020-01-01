@@ -11,7 +11,7 @@ class App extends Component {
                 "id": 1,
                 "user": "GrandPY",
                 "text": "Bonjour ! Bienvenue sur GrandPY Bot, pose une question relative à un lieu.",
-                "hour": ""
+                "hour": "Now"
             }
         ]
     }
