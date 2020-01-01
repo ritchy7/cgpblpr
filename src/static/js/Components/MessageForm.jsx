@@ -59,6 +59,7 @@ const SendMessage = () => {
                 type="text"
                 className="msger-input"
                 placeholder="Ask your question..."
+                required
             />
             <button type="submit" className="msger-send-btn">Send</button>
         </form>
