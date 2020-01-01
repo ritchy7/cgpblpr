@@ -3,7 +3,7 @@ import MessageForm from "./MessageForm";
 import Message from "./Message";
 
 
-const Main = ({ underConstruction, onAddToConversation, conversation }) => (
+const Main = ({ onAddToConversation, conversation }) => (
     <div>
         <main className="msger-chat">
             {
@@ -14,7 +14,6 @@ const Main = ({ underConstruction, onAddToConversation, conversation }) => (
         </main>
         <MessageForm
             onAddToConversation={onAddToConversation}
-            underConstruction={underConstruction}
         />
     </div>
 )

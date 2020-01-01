@@ -41,10 +41,9 @@ const App = () => {
 
     return (
         <section className="msger">
-            <Header underConstruction={handleClick} />
+            <Header />
             <Main
                 onAddToConversation={handleAdd}
-                underConstruction={handleClick}
                 conversation={conversation}
             />
             <Footer underConstruction={handleClick} />

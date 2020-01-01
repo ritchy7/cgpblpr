@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const Header = ({ underConstruction }) => {
+const Header = () => {
     const grandpy_style = {
         backgroundColor: "#00C441",
         borderRadius: "5px",
