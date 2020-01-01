@@ -9,7 +9,7 @@ const Footer = ({ underConstruction }) => {
         <footer>
             <small>&copy; {current_year} Ritchy Blezin </small>
             <small><a href="#" onClick={underConstruction}>About</a></small>
-            <small style={{ display: "none" }}>https://github.com/ritchy7/</small>
+            <small><a href="https://github.com/ritchy7/" target="_blank">Github</a></small>
         </footer>
     )
 }
