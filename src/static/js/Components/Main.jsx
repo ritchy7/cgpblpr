@@ -1,21 +1,26 @@
-import React from "react"
+import React, { useContext } from "react"
+// Components
 import MessageForm from "./MessageForm";
 import Message from "./Message";
+// Contexts
+import ConversationContext from "../Contexts/ConversationContext"
 
+const Main = () => {
+    const contextValue = useContext(ConversationContext)
 
-const Main = ({ onAddToConversation, conversation }) => (
-    <div>
-        <main className="msger-chat">
-            {
-                conversation.map(
-                    (message) => <Message key={message.id} message={message} />
-                )
-            }
-        </main>
-        <MessageForm />
-    </div>
-)
-
+    return (
+        <div>
+            <main className="msger-chat">
+                {
+                    contextValue.conversation.map(
+                        (message) => <Message key={message.id} message={message} />
+                    )
+                }
+            </main>
+            <MessageForm />
+        </div>
+    )
+}
 
 
 export default Main;
