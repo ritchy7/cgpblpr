@@ -1,71 +1,64 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 
-class SendMessage extends Component {
-    state = {
-        message: "",
-        show_animation: "hidden"
-    }
+const SendMessage = ({ onAddToConversation }) => {
 
+    const [message, setMessage] = useState("")
+    const [showAnimation, setShowAnimation] = useState("hidden")
 
-    handleChange = event => {
+    const handleChange = event => {
         // Get the written message.
-        const message = event.currentTarget.value;
+        const msg = event.currentTarget.value;
         // Put the message in the state.
-        this.setState({ message: message })
+        setMessage(msg)
     }
 
-    handleSubmit = event => {
+    const handleSubmit = event => {
         // Stop the initial action that reset the page.
         event.preventDefault();
-        const onAddToConversation = this.props.onAddToConversation
-        const message = this.state.message
+        const msg = message
 
         // Add the user message to the conversation.
         onAddToConversation({
             "user": "Me",
-            "text": message
+            "text": msg
         })
         // Send the message to Flask Background with Axios package.
         // Show a charging color bar beside the input.
-        this.setState({show_animation: ""})
+        setShowAnimation("")
         axios.post('/askbot', {
-            message: message
+            message: msg
         })
-        .then((response) => {
-            // Get the response.
-            onAddToConversation({
-                "user": "GrandPY",
-                "text": response.data.message
+            .then((response) => {
+                // Get the response.
+                onAddToConversation({
+                    "user": "GrandPY",
+                    "text": response.data.message
+                })
+                setShowAnimation("hidden")
             })
-            this.setState({show_animation: "hidden"})
-        })
-        .catch((error) => console.log(error));
-        this.setState({ message: "" })
+            .catch((error) => console.log(error));
+        setMessage("")
     }
-
-    render(){
-        return (
-            <form onSubmit={this.handleSubmit} className="msger-inputarea">
-                <div className="load-wrapp" style={{visibility: this.state.show_animation}}>
-                    <div className="load">
-                        <div className="line"></div>
-                        <div className="line"></div>
-                        <div className="line"></div>
-                    </div>
+    return (
+        <form onSubmit={handleSubmit} className="msger-inputarea">
+            <div className="load-wrapp" style={{ visibility: showAnimation }}>
+                <div className="load">
+                    <div className="line"></div>
+                    <div className="line"></div>
+                    <div className="line"></div>
                 </div>
-                <input
-                    onChange={this.handleChange}
-                    value={this.state.message}
-                    type="text"
-                    className="msger-input"
-                    placeholder="Ask your question..."
-                />
-                <button type="submit" className="msger-send-btn">Send</button>
-            </form>
-            )
-    }
+            </div>
+            <input
+                onChange={handleChange}
+                value={message}
+                type="text"
+                className="msger-input"
+                placeholder="Ask your question..."
+            />
+            <button type="submit" className="msger-send-btn">Send</button>
+        </form>
+    )
 }
-
 export default SendMessage;

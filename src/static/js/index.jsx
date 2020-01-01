@@ -4,5 +4,4 @@ import App from "./App";
 require('../css/grandpy.css')
 
 // Render the entire React components in root div wich have the root id.
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(<App />, document.getElementById("root"));
