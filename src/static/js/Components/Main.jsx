@@ -12,9 +12,7 @@ const Main = ({ onAddToConversation, conversation }) => (
                 )
             }
         </main>
-        <MessageForm
-            onAddToConversation={onAddToConversation}
-        />
+        <MessageForm />
     </div>
 )
 

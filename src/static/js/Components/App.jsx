@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+// Components
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
-
-
+// Contexts
+import ConversationContext from "../Contexts/ConversationContext"
 
 
 
@@ -15,8 +16,7 @@ const App = () => {
             "text": "Bonjour ! Bienvenue sur GrandPY Bot, pose une question relative à un lieu.",
             "hour": "Now"
         }
-    ])
-
+    ]);
     // List all of messages exchange between the human and the bot.
     const handleAdd = message => {
         // Get all messages.
@@ -31,7 +31,11 @@ const App = () => {
         conv.push(message)
         // Replace the messages in the state.
         setConversation([...conv])
-    }
+    };
+    const contextValue = {
+        conversation: conversation,
+        updateConversation: handleAdd
+    };
 
     // Show a alert message if trying to change language.
     const handleClick = (event) => {
@@ -40,14 +44,15 @@ const App = () => {
     }
 
     return (
-        <section className="msger">
-            <Header />
-            <Main
-                onAddToConversation={handleAdd}
-                conversation={conversation}
-            />
-            <Footer underConstruction={handleClick} />
-        </section>
+        <ConversationContext.Provider value={contextValue}>
+            <section className="msger">
+                <Header />
+                <Main
+                    conversation={conversation}
+                />
+                <Footer underConstruction={handleClick} />
+            </section>
+        </ConversationContext.Provider>
     )
 }
 

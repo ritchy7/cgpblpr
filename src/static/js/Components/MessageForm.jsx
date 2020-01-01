@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+// Contexts
+import ConversationContext from "../Contexts/ConversationContext";
 
 
-const SendMessage = ({ onAddToConversation }) => {
+const SendMessage = () => {
 
     const [message, setMessage] = useState("")
     const [showAnimation, setShowAnimation] = useState("hidden")
+    const contextValue = useContext(ConversationContext)
 
     const handleChange = event => {
         // Get the written message.
@@ -20,7 +23,7 @@ const SendMessage = ({ onAddToConversation }) => {
         const msg = message
 
         // Add the user message to the conversation.
-        onAddToConversation({
+        contextValue.updateConversation({
             "user": "Me",
             "text": msg
         })
@@ -32,7 +35,7 @@ const SendMessage = ({ onAddToConversation }) => {
         })
             .then((response) => {
                 // Get the response.
-                onAddToConversation({
+                contextValue.updateConversation({
                     "user": "GrandPY",
                     "text": response.data.message
                 })
