@@ -47,7 +47,7 @@ const App = () => {
         <ConversationContext.Provider value={contextValue}>
             <section className="msger">
                 <Header />
-                <Main conversation={conversation} />
+                <Main />
                 <Footer underConstruction={handleClick} />
             </section>
         </ConversationContext.Provider>
