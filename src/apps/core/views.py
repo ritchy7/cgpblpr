@@ -10,6 +10,9 @@ from flask import (
     request
 )
 
+# Local imports.
+from apps.grandpy.utils import parser_killer
+
 app = Flask(
     __name__,
     static_folder='../../static/dist',
@@ -18,8 +21,6 @@ app = Flask(
 app.config.from_object('config')
 
 # Main route.
-
-
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -27,9 +28,9 @@ def index():
 
 @app.route('/askbot', methods=['POST'])
 def ask_bot():
+    # Get the JSON received.
     request_data = ast.literal_eval(request.data.decode('utf-8'))
-    print(request_data)
-    response = jsonify({'message': request_data['message']})
     # Add a timer to slow down the bot.
     time.sleep(2)
+    response = jsonify({"response": parser_killer(request_data['message'])})
     return response

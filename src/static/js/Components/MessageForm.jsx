@@ -37,7 +37,7 @@ const SendMessage = () => {
                 // Get the response.
                 contextValue.updateConversation({
                     "user": "GrandPY",
-                    "text": response.data.message
+                    "text": response.data.response
                 })
                 setShowAnimation("hidden")
             })
