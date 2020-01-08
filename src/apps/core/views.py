@@ -31,6 +31,6 @@ def ask_bot():
     # Get the JSON received.
     request_data = ast.literal_eval(request.data.decode('utf-8'))
     # Add a timer to slow down the bot.
-    time.sleep(2)
+    time.sleep(1)
     response = jsonify({"response": parser_killer(request_data['message'])})
     return response
