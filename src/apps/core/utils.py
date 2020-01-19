@@ -22,4 +22,4 @@ def get_env_variable(var_name):
         print(50 * '-')
         print(f'An error occured attempting to get variable environnement :\n{e}')
         print(50 * '-')
-        raise (f'Set the {var_name} environment variable.')
+        raise ValueError(f'Set the {var_name} environment variable.')
