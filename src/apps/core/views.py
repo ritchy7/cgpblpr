@@ -11,7 +11,7 @@ from flask import (
 )
 
 # Local imports.
-from apps.grandpy.utils import parser_killer
+from apps.grandpy.utils import PlaceInformation
 
 app = Flask(
     __name__,
@@ -28,9 +28,26 @@ def index():
 
 @app.route('/askbot', methods=['POST'])
 def ask_bot():
+    """
+    .
+    """
     # Get the JSON received.
-    request_data = ast.literal_eval(request.data.decode('utf-8'))
+    request_data = request.get_json(force=True)
+    message = request_data['message']
+    place_information = PlaceInformation(message)
+    place_reference = place_information.place_reference
+    print(place_reference)
+    # status = place_information.status
+    #
+    # if status == 'OK':
+    #     result = 'salut'
+    # else:
+    #     result = 'Je n\'ai rien trouve :-/'
+    result = 'test'
     # Add a timer to slow down the bot.
     time.sleep(1)
-    response = jsonify({"response": parser_killer(request_data['message'])})
+    response = jsonify({
+        "response": result
+    })
+
     return response
