@@ -34,8 +34,7 @@ class PlaceInformation:
             if response['status'] == "OK":
                 self.status = response['status']
                 self.place_reference = response['predictions'][0]['reference']
-                return response
-            else:
+            return response
 
 
     def parser_killer(self):
