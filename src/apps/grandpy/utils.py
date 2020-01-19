@@ -17,7 +17,6 @@ class PlaceInformation:
         self.url = GOOGLE_API_BASE_URL
         self.place_reference = self.get_place_reference()
 
-
     def get_place_reference(self):
         """
         .
@@ -34,8 +33,7 @@ class PlaceInformation:
             if response['status'] == "OK":
                 self.status = response['status']
                 self.place_reference = response['predictions'][0]['reference']
-            return response
-
+        return response
 
     def parser_killer(self):
         """

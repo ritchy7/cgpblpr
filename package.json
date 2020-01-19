@@ -4,7 +4,7 @@
   "description": "Grandpy Bot project frontend",
   "main": "index.jsx",
   "scripts": {
-    "build": "webpack -p --progress --config webpack.config.js",
+    "build": "webpack --mode production --config webpack.config.js --env.NODE_ENV=production --progress",
     "dev-build": "",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --progress -d --config webpack.config.js --watch"
