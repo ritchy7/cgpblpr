@@ -18,7 +18,6 @@ class BotResponseTests(TestCase):
         """
         Keep all the words.
         """
-
         self.assertEqual("salut", PlaceInformation("salut").parser_killer())
         self.assertEqual("salut+salut", PlaceInformation("SALUT SALUT").parser_killer())
         self.assertEqual("salut+ca+grand+mere", PlaceInformation("salut ca grand mere").parser_killer())
@@ -49,7 +48,7 @@ class BotResponseTests(TestCase):
         self.assertEqual("ZERO_RESULTS", PlaceInformation("je m'appel ritchy").status)
         self.assertEqual("ZERO_RESULTS", PlaceInformation("salut j'aime bien discuter avec les robots").status)
 
-    def test_should_return__status(self):
+    def test_should_return_zero_results(self):
         self.assertEqual("ZERO_RESULTS", PlaceInformation("je m'appel ritchy").status)
         self.assertEqual("ZERO_RESULTS", PlaceInformation("salut j'aime bien discuter avec les robots").status)
 
