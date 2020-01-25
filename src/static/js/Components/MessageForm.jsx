@@ -21,7 +21,6 @@ const SendMessage = () => {
         // Stop the initial action that reset the page.
         event.preventDefault();
         const msg = message
-
         // Add the user message to the conversation.
         contextValue.updateConversation({
             "user": "Me",
@@ -35,10 +34,33 @@ const SendMessage = () => {
         })
             .then((response) => {
                 // Get the response.
-                contextValue.updateConversation({
-                    "user": "GrandPY",
-                    "text": response.data.response
-                })
+                const responseDescription = response.data.description
+                const responseAddress = response.data.address
+                const responsePosition = response.data.position
+
+                if (responseAddress) {
+                    contextValue.updateConversation({
+                        "user": "GrandPY",
+                        "text": responseAddress
+                    })
+                    if (responseDescription){
+                        contextValue.updateConversation({
+                            "user": "GrandPY",
+                            "text": responseDescription
+                        })
+                    } else {
+                        contextValue.updateConversation({
+                            "user": "GrandPY",
+                            "text": "Par contre je n'ai pas d'anecdote pour le coup.."
+                        })
+                    }
+                } else {
+                    console.log(2)
+                    contextValue.updateConversation({
+                        "user": "GrandPY",
+                        "text": "Je n'ai rien trouvé réessaie avec plus de précision."
+                    })
+                }
                 setShowAnimation("hidden")
             })
             .catch((error) => console.log(error));
