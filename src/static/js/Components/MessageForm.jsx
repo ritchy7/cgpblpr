@@ -6,15 +6,15 @@ import ConversationContext from "../Contexts/ConversationContext";
 
 const SendMessage = () => {
 
-    const [message, setMessage] = useState("")
-    const [showAnimation, setShowAnimation] = useState("hidden")
-    const contextValue = useContext(ConversationContext)
+    const [message, setMessage] = useState("");
+    const [showAnimation, setShowAnimation] = useState("hidden");
+    const contextValue = useContext(ConversationContext);
 
     const handleChange = event => {
         // Get the written message.
         const msg = event.currentTarget.value;
         // Put the message in the state.
-        setMessage(msg)
+        setMessage(msg);
     }
 
     const handleSubmit = event => {
@@ -33,38 +33,25 @@ const SendMessage = () => {
             message: msg
         })
             .then((response) => {
-                // Get the response.
-                const responseDescription = response.data.description
-                const responseAddress = response.data.address
-                const responsePosition = response.data.position
+                // Get the response data.
+                const responseDescription = response.data.description;
+                const responseAddress = response.data.address;
+                const responsePosition = response.data.position;
 
                 if (responseAddress) {
                     contextValue.updateConversation({
                         "user": "GrandPY",
                         "text": responseAddress
-                    })
-                    if (responseDescription){
-                        contextValue.updateConversation({
-                            "user": "GrandPY",
-                            "text": responseDescription
-                        })
-                    } else {
-                        contextValue.updateConversation({
-                            "user": "GrandPY",
-                            "text": "Par contre je n'ai pas d'anecdote pour le coup.."
-                        })
-                    }
-                } else {
-                    console.log(2)
-                    contextValue.updateConversation({
-                        "user": "GrandPY",
-                        "text": "Je n'ai rien trouvé réessaie avec plus de précision."
-                    })
+                    });
                 }
-                setShowAnimation("hidden")
+                contextValue.updateConversation({
+                    "user": "GrandPY",
+                    "text": responseDescription
+                });
+                setShowAnimation("hidden");
             })
             .catch((error) => console.log(error));
-        setMessage("")
+        setMessage("");
     }
     return (
         <form onSubmit={handleSubmit} className="msger-inputarea">
