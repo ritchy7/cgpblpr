@@ -8,4 +8,15 @@ DESCRIPTION_DEBUT_SENTENCE = (
     "En maternelle j'ai appris que par la"
  )
 
+NO_FOUND_SENTENCE = (
+    "Purée j'ai rien trouvé ! Soit on parle pas la même langue soit je suis trop vieux.",
+    "T'es sur de ce que tu cherches ? Réessaie avec une phrase plus compréhensible s'il te plaît, je ne suis plus tout jeune.",
+    "Tu re-tente quand tu auras compris que je parle le vieux pas le jeune."
+    "Hein ? Attends j'ai pas mes lunettes, re-dit.",
+    "J'ai 100 ans pourtant ça j'en ai jamais entendu parler.",
+    "Quoi ?",
+    "J'ai rien compris.",
+    "Plaît-il ?"
+)
+
 GOOGLE_API_BASE_URL_FIND_PLACE = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"
