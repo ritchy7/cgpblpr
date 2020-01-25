@@ -8,14 +8,15 @@ from .constants import GOOGLE_API_BASE_URL_FIND_PLACE, STOP_WORDS
 class PlaceInformation:
 
     def __init__(self, sentence):
-        self.sentence = sentence
+        self.description = None
         self.response = None
+        self.sentence = sentence
         self.parsed_input_message = self.parser_killer()
         self.address = self.get_address()
 
     def call(self, url, parameters):
         """
-        Make a API Call to the url and the parameters given in parameters.
+        Make a API Call to the url and with the parameters given.
 
         Parameters
         ----------
@@ -28,8 +29,9 @@ class PlaceInformation:
         Returns
         -------
         response : dict
-            Response with 2 keys candidates which contains the data and status
-            which contains the status result reponse.
+            Response with 2 keys :
+                - candidates which contains the data.
+                - status which contains the status result reponse.
         """
         response = ast.literal_eval(requests.get(url=url, params=parameters)._content.decode('utf-8'))
         self.response = response
