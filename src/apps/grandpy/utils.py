@@ -3,11 +3,17 @@ import requests
 from collections import namedtuple
 
 from config import GOOGLE_API_KEY_ID
-from .constants import GOOGLE_API_BASE_URL_FIND_PLACE, STOP_WORDS
+from .constants import (
+    GOOGLE_API_BASE_URL_FIND_PLACE,
+    GOOGLE_API_BASE_URL_GET_COORDINATES,
+    STOP_WORDS,
+    WIKIPEDIA_API_BASE_URL_FIND_INTRODUCTION
+)
 
 class PlaceInformation:
 
     def __init__(self, sentence):
+        self.coordinates = None
         self.description = None
         self.response = None
         self.sentence = sentence
@@ -37,6 +43,44 @@ class PlaceInformation:
         self.response = response
         return response
 
+    def get_description(self):
+        """
+        Get the description of an address.
+        """
+        res = requests.get(url=WIKIPEDIA_API_BASE_URL_FIND_INTRODUCTION,
+                           params={
+                               "format": "json",
+                               "action": 'query',
+                               "list": "geosearch",
+                               "gsradius": 10000,
+                               "gslimit": 10,
+                               "gscoord": f"{self.coordinates['lng']}|{self.coordinates['lat']}"
+                            }
+        )
+        print('response', f"{self.coordinates['lng']}|{self.coordinates['lat']}")
+
+    def get_coordinates(self):
+        """
+        Get the coordinates for an address (latidute, longitude).
+        """
+        url = GOOGLE_API_BASE_URL_GET_COORDINATES
+        parameters = {
+            'key': GOOGLE_API_KEY_ID,
+            'address': ''.join(
+                char
+                for char in self.response['candidates'][0]['formatted_address']
+                if not char.isdigit()
+            )
+        }
+        self.call(url, parameters)
+        coordinates = self.response['results'][0]['geometry']['location']
+        self.coordinates = {
+            'lng': coordinates['lng'],
+            'lat': coordinates['lat']
+        }
+        self.get_description()
+
+
     def get_address(self):
         """
         Get an address from a sentence if there are no result remove each word
@@ -49,7 +93,7 @@ class PlaceInformation:
         """
         url = GOOGLE_API_BASE_URL_FIND_PLACE
         parameters = {
-            'key':GOOGLE_API_KEY_ID,
+            'key': GOOGLE_API_KEY_ID,
             'input': self.parsed_input_message,
             'inputtype': 'textquery',
             'fields': 'formatted_address'
@@ -62,8 +106,8 @@ class PlaceInformation:
         if self.response['status'] != 'OK':
             response = ""
         else:
-            print(self.response)
             response = self.response['candidates'][0]['formatted_address']
+            self.get_coordinates()
         return response
 
     def parser_killer(self):
@@ -78,7 +122,7 @@ class PlaceInformation:
             structured_sentence - str
                 Sentence parsed (without stop words).
         """
-        self.sentence = self.sentence.lower().replace('\'', ' ')
+        self.sentence = self.sentence.lower().replace('\'', ' ').replace('-', ' ')
         structured_sentence = '+'.join([
             word
             for word in self.sentence.split()
