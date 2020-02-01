@@ -12,7 +12,7 @@ from flask import (
 )
 
 # Local imports.
-from apps.grandpy.constants import DESCRIPTION_DEBUT_SENTENCE
+from apps.grandpy.constants import DESCRIPTION_DEBUT_SENTENCE, NO_FOUND_SENTENCE
 from apps.grandpy.utils import PlaceInformation
 
 app = Flask(
@@ -37,10 +37,14 @@ def ask_bot():
     request_data = request.get_json(force=True)
     message = request_data['message']
     place_information = PlaceInformation(message)
-    description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + "" if place_information.address else None
+    if place_information.description:
+        description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + place_information.description
+    else:
+        description = random.choice(NO_FOUND_SENTENCE)
+
     result = {
         "address": place_information.address,
-        "position": {'lng': 0, 'lat': 0},
+        "position": place_information.coordinates,
         "description": description
     }
     time.sleep(1)
