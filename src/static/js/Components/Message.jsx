@@ -11,7 +11,7 @@ const show_profil_picture = (user) => {
 const Message = ({ message }) => {
     let message_position = message.user == "Me" ? "self" : "other"
     let user_image = show_profil_picture(message.user)
-    
+
     return (
         <li className={message_position}>
             <div className="avatar">
