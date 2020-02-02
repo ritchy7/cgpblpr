@@ -5,7 +5,6 @@ import ConversationContext from "../Contexts/ConversationContext";
 
 
 const SendMessage = () => {
-
     const [message, setMessage] = useState("");
     const [showAnimation, setShowAnimation] = useState("hidden");
     const contextValue = useContext(ConversationContext);
@@ -32,27 +31,28 @@ const SendMessage = () => {
         axios.post('/askbot', {
             message: msg
         })
-            .then((response) => {
-                // Get the response data.
-                const responseDescription = response.data.description;
-                const responseAddress = response.data.address;
-                const responsePosition = response.data.position;
+        .then((response) => {
+            // Get the response data.
+            const responseDescription = response.data.description;
+            const responseAddress = response.data.address;
+            const responsePosition = response.data.position;
 
-                if (responseAddress) {
-                    contextValue.updateConversation({
-                        "user": "GrandPY",
-                        "text": responseAddress
-                    });
-                }
+            if (responseAddress) {
                 contextValue.updateConversation({
                     "user": "GrandPY",
-                    "text": responseDescription
+                    "text": responseAddress
                 });
-                setShowAnimation("hidden");
-            })
-            .catch((error) => console.log(error));
+            }
+            contextValue.updateConversation({
+                "user": "GrandPY",
+                "text": responseDescription
+            });
+            setShowAnimation("hidden");
+        })
+        .catch((error) => console.log(error));
         setMessage("");
     }
+
     return (
         <form onSubmit={handleSubmit}>
             <input
