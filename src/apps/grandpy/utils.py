@@ -1,24 +1,53 @@
 import ast
+import random
 import requests
 from collections import namedtuple
 
+
 from config import GOOGLE_API_KEY_ID
 from .constants import (
+    DESCRIPTION_DEBUT_SENTENCE,
     GOOGLE_API_BASE_URL_FIND_PLACE,
     GOOGLE_API_BASE_URL_GET_COORDINATES,
+    NO_ANECDOTE_SENTENCE,
+    NO_FOUND_SENTENCE,
     STOP_WORDS,
-    WIKIPEDIA_API_BASE_URL_FIND_INTRODUCTION
+    WIKIPEDIA_API_BASE_URL
 )
 
-class PlaceInformation:
+class PlaceInformations:
 
     def __init__(self, sentence):
-        self.coordinates = None
-        self.description = None
-        self.response = None
-        self.sentence = sentence
-        self.parsed_input_message = self.parser_killer()
-        self.address = self.get_address()
+        self._address = None
+        self._coordinates = None
+        self._description = None
+        self._response = None
+        self._sentence = sentence
+        self._parsed_input_message = self.parser_killer()
+
+    def parser_killer(self):
+        """
+        Parse the sentence given in parameter to get only the important words
+
+        Arguments:
+            sentence - str
+                Sentence in raw version (with stop words).
+        Returns
+        -------
+            structured_sentence - str
+                Sentence parsed (without stop words).
+        """
+        # Replace all quotes and hyphens with space.
+        self._sentence = self._sentence.lower().replace('\'', ' ').replace('-', ' ')
+        # Join all the words with + instead space for an url compatibility
+        # If the words are not stop words.
+        structured_sentence = '+'.join([
+            word
+            for word in self._sentence.split()
+            if word not in STOP_WORDS
+        ])
+
+        return structured_sentence
 
     def call(self, url, parameters):
         """
@@ -39,47 +68,10 @@ class PlaceInformation:
                 - candidates which contains the data.
                 - status which contains the status result reponse.
         """
-        response = ast.literal_eval(requests.get(url=url, params=parameters)._content.decode('utf-8'))
-        self.response = response
+        # Transform the response into a dictionnary.
+        response = ast.literal_eval(requests.get(url, parameters)._content.decode('utf-8'))
+        self._response = response
         return response
-
-    def get_description(self):
-        """
-        Get the description of an address.
-        """
-        res = requests.get(url=WIKIPEDIA_API_BASE_URL_FIND_INTRODUCTION,
-                           params={
-                               "format": "json",
-                               "action": 'query',
-                               "list": "geosearch",
-                               "gsradius": 10000,
-                               "gslimit": 10,
-                               "gscoord": f"{self.coordinates['lng']}|{self.coordinates['lat']}"
-                            }
-        )
-        print('response', f"{self.coordinates['lng']}|{self.coordinates['lat']}")
-
-    def get_coordinates(self):
-        """
-        Get the coordinates for an address (latidute, longitude).
-        """
-        url = GOOGLE_API_BASE_URL_GET_COORDINATES
-        parameters = {
-            'key': GOOGLE_API_KEY_ID,
-            'address': ''.join(
-                char
-                for char in self.response['candidates'][0]['formatted_address']
-                if not char.isdigit()
-            )
-        }
-        self.call(url, parameters)
-        coordinates = self.response['results'][0]['geometry']['location']
-        self.coordinates = {
-            'lng': coordinates['lng'],
-            'lat': coordinates['lat']
-        }
-        self.get_description()
-
 
     def get_address(self):
         """
@@ -94,39 +86,94 @@ class PlaceInformation:
         url = GOOGLE_API_BASE_URL_FIND_PLACE
         parameters = {
             'key': GOOGLE_API_KEY_ID,
-            'input': self.parsed_input_message,
+            'input': self._parsed_input_message,
             'inputtype': 'textquery',
             'fields': 'formatted_address'
         }
-        input_message = self.parsed_input_message.split('+')
+        input_message = self._parsed_input_message.split('+')
         word_counter = 1
+        # Iterate on the sentence
         while self.call(url, parameters)['status'] == 'ZERO_RESULTS' and word_counter <= len(input_message) / 2:
             parameters['input'] = '+'.join(input_message[word_counter:])
             word_counter += 1
-        if self.response['status'] != 'OK':
-            response = ""
+        if self._response['status'] != 'OK':
+            return None
         else:
-            response = self.response['candidates'][0]['formatted_address']
-            self.get_coordinates()
-        return response
+            self._address = self._response['candidates'][0]['formatted_address']
+        return self._address
 
-    def parser_killer(self):
+    def get_coordinates(self):
         """
-        Parse the sentence given in parameter to get only the important words
-
-        Arguments:
-            sentence - str
-                Sentence in raw version (with stop words).
-        Returns
-        -------
-            structured_sentence - str
-                Sentence parsed (without stop words).
+        Get the coordinates for an address (latidute, longitude).
         """
-        self.sentence = self.sentence.lower().replace('\'', ' ').replace('-', ' ')
-        structured_sentence = '+'.join([
-            word
-            for word in self.sentence.split()
-            if word not in STOP_WORDS
-        ])
+        if not self._address:
+            return None
+        # Remove all digit characters.
+        address = ''.join(
+            char
+            for char in self._response['candidates'][0]['formatted_address']
+            if not char.isdigit()
+        )
+        parameters = {
+            'key': GOOGLE_API_KEY_ID,
+            'address': address
+        }
+        self.call(GOOGLE_API_BASE_URL_GET_COORDINATES, parameters)
+        # Get the coordinates.
+        coordinates = self._response['results'][0]['geometry']['location']
+        self._coordinates = {
+            'lng': coordinates['lng'],
+            'lat': coordinates['lat']
+        }
+        return self._coordinates
 
-        return structured_sentence
+    def get_description(self):
+        """
+        Get the description of an address.
+        """
+        if not self._coordinates:
+            return random.choice(NO_FOUND_SENTENCE)
+        page_title = None
+        page_id = None
+        parameters = {
+            "format": "json",
+            "action": 'query',
+            "list": "geosearch",
+            "gsradius": 10000,
+            "gslimit": 10,
+            "gscoord": f"{self._coordinates['lat']}|{self._coordinates['lng']}"
+        }
+        response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
+        # If there are founded pages.
+        if response['query']['geosearch']:
+            # Take the good page.
+            for obj in response['query']['geosearch']:
+                if obj['title'] in self._address:
+                    page_title = obj['title']
+                    page_id = obj['pageid']
+                    break
+            # Get the summary from the page.
+            if page_title and page_id:
+                parameters = {
+                    "format": "json",
+                    "origin": "*",
+                    "generator": "search",
+                    "prop": "extracts",
+                    "gsrsearch": page_title,
+                    "gsrlimit": 20,
+                    "exintro": 1,
+                    "explaintext": 1,
+                    "exchars": 400,
+                    "exlimit": 20,
+                    "action": 'query'
+                }
+                response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
+                self._description = response['query']['pages'][str(page_id)]['extract']
+
+        if self._description:
+            self._description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + ' ' + self._description
+        elif not self._description and self._address:
+            self._description = random.choice(NO_ANECDOTE_SENTENCE)
+        else:
+            self._description = random.choice(NO_FOUND_SENTENCE)
+        return self._description

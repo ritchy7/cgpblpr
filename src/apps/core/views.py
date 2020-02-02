@@ -12,7 +12,7 @@ from flask import (
 )
 
 # Local imports.
-from apps.grandpy.utils import PlaceInformation
+from apps.grandpy.utils import PlaceInformations
 
 app = Flask(
     __name__,
@@ -34,7 +34,7 @@ def ask_bot():
     """
     request_data = request.get_json(force=True)
     message = request_data['message']
-    place_information = PlaceInformation(message)
+    place_information = PlaceInformations(message)
     address = place_information.get_address()
     coordinates = place_information.get_coordinates()
     description = place_information.get_description()
