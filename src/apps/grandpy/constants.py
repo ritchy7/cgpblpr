@@ -19,8 +19,13 @@ NO_FOUND_SENTENCE = (
     "Plaît-il ?"
 )
 
+NO_ANECDOTE_SENTENCE = (
+    "Je n'ai rien sur cette adresse..!",
+    "Ma mémoire me fait défaut..pourtant je pense déjà avoir été la-bas"
+)
+
 GOOGLE_API_BASE_URL_FIND_PLACE = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?"
 
 GOOGLE_API_BASE_URL_GET_COORDINATES = "https://maps.googleapis.com/maps/api/geocode/json?"
 
-WIKIPEDIA_API_BASE_URL_FIND_INTRODUCTION = "https://fr.wikipedia.org/w/api.php?"
+WIKIPEDIA_API_BASE_URL = "https://fr.wikipedia.org/w/api.php?"
