@@ -1,7 +1,7 @@
 # Standard imports.
 import ast
 import time
-import random
+
 
 # Flask imports.
 from flask import (
@@ -12,7 +12,6 @@ from flask import (
 )
 
 # Local imports.
-from apps.grandpy.constants import DESCRIPTION_DEBUT_SENTENCE, NO_FOUND_SENTENCE
 from apps.grandpy.utils import PlaceInformation
 
 app = Flask(
@@ -33,18 +32,16 @@ def ask_bot():
     """
     Parse the user sentence to get an address, a position and some description.
     """
-    # Get the JSON received.
     request_data = request.get_json(force=True)
     message = request_data['message']
     place_information = PlaceInformation(message)
-    if place_information.description:
-        description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + place_information.description
-    else:
-        description = random.choice(NO_FOUND_SENTENCE)
+    address = place_information.get_address()
+    coordinates = place_information.get_coordinates()
+    description = place_information.get_description()
 
     result = {
-        "address": place_information.address,
-        "position": place_information.coordinates,
+        "address": address,
+        "position": coordinates,
         "description": description
     }
     time.sleep(1)
