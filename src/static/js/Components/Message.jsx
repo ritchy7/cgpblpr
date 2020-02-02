@@ -1,25 +1,27 @@
 import React, { Component } from "react";
 
+const show_profil_picture = (user) => {
+    if (user == "me"){
+        return <img src="https://image.flaticon.com/icons/svg/189/189061.svg" draggable="false"/>
+    }
+    return <img src="https://image.flaticon.com/icons/png/512/2115/2115916.png" draggable="false"/>
+}
+
 
 const Message = ({ message }) => {
-    let message_position = message.user == "Me" ? "msg right-msg" : "msg left-msg"
-
+    let message_position = message.user == "Me" ? "self" : "other"
+    let user_image = show_profil_picture(message.user)
+    
     return (
-        <div className={message_position}>
-            <div className="msg-img"></div>
-
-            <div className="msg-bubble">
-                <div className="msg-info">
-                    <div className="msg-info-name">{message.user}</div>
-                    <div className="msg-info-time">{message.hour}</div>
-                </div>
-
-                <div className="msg-text">
-                    {message.text}
-                    <h1 id="resultat"></h1>
-                </div>
+        <li className={message_position}>
+            <div className="avatar">
+                {user_image}
             </div>
-        </div>
+          <div className="msg">
+            <p>{message.text}</p>
+            <time>{message.hour}</time>
+          </div>
+        </li>
     )
 }
 

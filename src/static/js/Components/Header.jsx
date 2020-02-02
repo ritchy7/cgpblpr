@@ -1,24 +1,12 @@
 import React from "react";
 
-const Header = () => {
-    const grandpy_style = {
-        backgroundColor: "#00C441",
-        borderRadius: "5px",
-        textDecoration: "none",
-        color: "#666666",
-        padding: "5px"
-    };
-
+const Header = ({ underConstruction }) => {
     return (
-        <header className="msger-header">
-            <div className="msger-header-title">
-                <i className="fas fa-comment-alt">
-                    <a style={grandpy_style} href="/">GrandPY</a> - Tchat Bot
-            </i>
-            </div>
-            <div className="msger-header-options">
-                <span><i className="fas fa-cog"></i></span>
-            </div>
+        <header className="navbar">
+            <div className="name"><a href="/">GrandPY - Tchat Bot</a></div>
+            <div><a href="#" onClick={underConstruction}>About</a></div>
+            <div><a href="https://github.com/ritchy7/" target="_blank">Github</a></div>
+            <div>&copy; {new Date().getFullYear()} Ritchy Blezin </div>
         </header>
     )
 }

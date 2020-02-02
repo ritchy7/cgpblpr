@@ -45,11 +45,8 @@ const App = () => {
 
     return (
         <ConversationContext.Provider value={contextValue}>
-            <section className="msger">
-                <Header />
-                <Main />
-                <Footer underConstruction={handleClick} />
-            </section>
+            <Header underConstruction={handleClick}/>
+            <Main />
         </ConversationContext.Provider>
     )
 }

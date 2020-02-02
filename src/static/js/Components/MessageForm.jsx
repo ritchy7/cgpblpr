@@ -54,23 +54,22 @@ const SendMessage = () => {
         setMessage("");
     }
     return (
-        <form onSubmit={handleSubmit} className="msger-inputarea">
-            <div className="load-wrapp" style={{ visibility: showAnimation }}>
+        <form onSubmit={handleSubmit}>
+            <input
+                onChange={handleChange}
+                value={message}
+                type="text"
+                className="textarea"
+                placeholder="Ask your question..."
+                required
+            />
+            <div className="emojis load-wrapp" style={{ visibility: showAnimation }}>
                 <div className="load">
                     <div className="line"></div>
                     <div className="line"></div>
                     <div className="line"></div>
                 </div>
             </div>
-            <input
-                onChange={handleChange}
-                value={message}
-                type="text"
-                className="msger-input"
-                placeholder="Ask your question..."
-                required
-            />
-            <button type="submit" className="msger-send-btn">Send</button>
         </form>
     )
 }
