@@ -33,12 +33,10 @@ def ask_bot():
     Parse the user sentence to get an address, a position and some description.
     """
     request_data = request.get_json(force=True)
-    message = request_data['message']
-    place_information = PlaceInformations(message)
+    place_information = PlaceInformations(request_data.get('message', ''))
     address = place_information.get_address()
     coordinates = place_information.get_coordinates()
     description = place_information.get_description()
-
     result = {
         "address": address,
         "position": coordinates,
