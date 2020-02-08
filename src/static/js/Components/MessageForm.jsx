@@ -38,10 +38,17 @@ const SendMessage = () => {
             const responsePosition = response.data.position;
 
             if (responseAddress) {
-                contextValue.updateConversation({
+                let response = {
                     "user": "GrandPY",
                     "text": responseAddress
-                });
+                }
+                if (responsePosition){
+                    response["position"] = {
+                        "lng": responsePosition.lng,
+                        "lat": responsePosition.lat
+                    }
+                }
+                contextValue.updateConversation(response);
             }
             contextValue.updateConversation({
                 "user": "GrandPY",
