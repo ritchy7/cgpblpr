@@ -108,15 +108,9 @@ class PlaceInformations:
         """
         if not self._address:
             return None
-        # Remove all digit characters.
-        address = ''.join(
-            char
-            for char in self._response['candidates'][0]['formatted_address']
-            if not char.isdigit()
-        )
         parameters = {
             'key': GOOGLE_API_KEY_ID,
-            'address': address
+            'address': self._address
         }
         self.call(GOOGLE_API_BASE_URL_GET_COORDINATES, parameters)
         # Get the coordinates.
@@ -145,10 +139,14 @@ class PlaceInformations:
         }
         response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
         # If there are founded pages.
+        coord = f"{self._coordinates['lat']}|{self._coordinates['lng']}"
         if response['query']['geosearch']:
+            from pudb import set_trace; set_trace()
             # Take the good page.
+            address = self._address.replace('-', ' ')
             for obj in response['query']['geosearch']:
-                if obj['title'] in self._address:
+                obj_title = obj['title'].replace('-', ' ')
+                if obj_title in address:
                     page_title = obj['title']
                     page_id = obj['pageid']
                     break
@@ -160,10 +158,10 @@ class PlaceInformations:
                     "generator": "search",
                     "prop": "extracts",
                     "gsrsearch": page_title,
-                    "gsrlimit": 20,
+                    # "gsrlimit": 20,
                     "exintro": 1,
                     "explaintext": 1,
-                    "exchars": 400,
+                    "exchars": 800,
                     "exlimit": 20,
                     "action": 'query'
                 }
