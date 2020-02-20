@@ -167,4 +167,5 @@ packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 
 #Docker
-*.env
+web-variables.env
+.env.*
