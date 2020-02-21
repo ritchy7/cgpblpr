@@ -7,6 +7,6 @@ if __name__ == "__main__":
         kwargs = {
             "port": 8000,
             "debug": True,
-            "host": 0
+            "host": '0'
         }
     app.run(**kwargs)
