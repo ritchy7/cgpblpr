@@ -15,15 +15,13 @@ from flask_cors import CORS
 
 # Local imports.
 from config import ENVIRONMENT, GOOGLE_API_KEY_ID
-from .utils import check_environment
 from apps.grandpy.utils import PlaceInformations
 
 
-environment_folder = check_environment(ENVIRONMENT)
 app = Flask(
     __name__,
-    static_folder=f'../../../frontend/{environment_folder}/',
-    template_folder=f'../../../frontend/{environment_folder}'
+    static_folder=STATIC_FOLDER,
+    template_folder=TEMPLATE_FOLDER
 )
 app.config.from_object('config')
 CORS(app)
