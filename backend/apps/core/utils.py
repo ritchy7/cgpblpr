@@ -31,5 +31,5 @@ def check_environment(env):
     static files.
     """
     if 'prod' in env:
-        return 'build'
-    return 'public'
+        return 'templates'
+    return 'frontend/public'
