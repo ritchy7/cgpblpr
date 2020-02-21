@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  backend:
+    build:
+        context: ./docker/backend
+    restart: always
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./:/usr/src/cgpy
+    environment:
+        - PYTHONUNBUFFERED=1
+        - ENVIRONMENT=production
+        - GOOGLE_API_KEY_ID=${GOOGLE_API_KEY_ID}
+
+  frontend:
+      build:
+          context: ./docker/frontend
+      restart: always
+      working_dir: /usr/src/cgpy
+      ports:
+          - '3000:3000'
+      volumes:
+          - ./frontend:/usr/src/cgpy
+volumes:
+    backend-data:
