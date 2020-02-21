@@ -10,24 +10,21 @@ const Main = () => {
 
     return (
             <section className="avenue-messenger">
-                <div className="menu">
-                    <div className="items">
-                        <span>
-                            <a href="#" title="Minimize">&mdash;</a><br/>
-                            <a href="#" title="End Chat">&#10005;</a>
-                        </span>
-                    </div>
-                    <div className="button">...</div>
-                </div>
                 <div className="agent-face">
                     <div className="half">
-                        <img className="agent circle" src="http://askavenue.com/img/17.jpg" alt="Jesse Tino" />
+                        <a href="/">
+                            <img
+                                className="agent circle"
+                                src="https://image.flaticon.com/icons/png/512/2115/2115916.png"
+                                alt="grandpy bot"
+                            />
+                        </a>
                     </div>
                 </div>
                 <div className="chat">
                     <div className="chat-title">
-                        <h1>Jesse Tino</h1>
-                        <h2>RE/MAX</h2>
+                        <h1>GrandPy</h1>
+                        <h2>Bot</h2>
                     </div>
                     <div className="messages">
                         {

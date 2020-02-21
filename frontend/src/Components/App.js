@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 // Components
 import Main from "./Main";
 // Contexts
 import ConversationContext from "../Contexts/ConversationContext"
+import ApiKeyContext from "../Contexts/ApiKeyContext"
 
 
 const App = () => {
@@ -14,6 +16,8 @@ const App = () => {
             "hour": "Now"
         }
     ]);
+
+    const [apiKey, setApiKey] = useState("")
     // List all of messages exchange between the human and the bot.
     const handleAdd = message => {
         // Get all messages.
@@ -29,14 +33,33 @@ const App = () => {
         // Replace the messages in the state.
         setConversation([...conv])
     };
-    const contextValue = {
+
+    const handleUpdateKey = () => {
+        axios.get('/get_google_key')
+        .then((response) => setApiKey(response.data.key))
+        .catch((error) => console.log(error))
+    }
+    const conversationContextValue = {
         conversation: conversation,
         updateConversation: handleAdd
     };
 
+    const apiKeyContextValue = {
+        apiKey: apiKey,
+        updateApiKey: handleUpdateKey
+    };
+
+    // Scroll into the last message.
+    useEffect(() => {
+        let last_message = document.querySelector('.message:nth-last-child(1)');
+        last_message.scrollIntoView(true)
+    });
+
     return (
-        <ConversationContext.Provider value={contextValue}>
-            <Main />
+        <ConversationContext.Provider value={conversationContextValue}>
+            <ApiKeyContext.Provider value={apiKeyContextValue}>
+                <Main />
+            </ApiKeyContext.Provider>
         </ConversationContext.Provider>
     )
 }
