@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
 // Components
 import Main from "./Main";
 // Contexts
@@ -23,8 +24,8 @@ const App = () => {
         // Get all messages.
         const conv = conversation
         // Add the current hour.
-        const current_date = new Date()
-        const current_hour = ("0" + current_date.getHours()).slice(-2) + ":" + ("0" + current_date.getMinutes()).slice(-2)
+        moment.locale('fr');
+        const current_hour = moment().format('LT');
         message["hour"] = current_hour
         // Add an id to the message.
         message["id"] = Math.round(Math.random() * 100000)
