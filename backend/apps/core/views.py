@@ -11,21 +11,34 @@ from flask import (
     request
 )
 
+from flask_cors import CORS
+
 # Local imports.
+from config import ENVIRONMENT, GOOGLE_API_KEY_ID
+from .utils import check_environment
 from apps.grandpy.utils import PlaceInformations
 
+
+environment_folder = check_environment(ENVIRONMENT)
 app = Flask(
     __name__,
-    static_folder='../../../frontend/build/',
-    template_folder='../../../frontend/build'
+    static_folder=f'../../../frontend/{environment_folder}/',
+    template_folder=f'../../../frontend/{environment_folder}'
 )
 app.config.from_object('config')
-
+CORS(app)
 # Main route.
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
 
+@app.route('/get_google_key', methods=['GET'])
+def get_google_key():
+    """
+    Return the Google API key.
+    """
+    response = {"key": GOOGLE_API_KEY_ID}
+    return jsonify(response)
 
 @app.route('/askbot', methods=['POST'])
 def ask_bot():

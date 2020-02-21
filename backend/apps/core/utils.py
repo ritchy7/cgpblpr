@@ -1,5 +1,8 @@
-# Standard Library
+# Standard Libraries.
 import os
+
+# Local libraries.
+from config import *
 
 
 def get_env_variable(var_name):
@@ -18,8 +21,15 @@ def get_env_variable(var_name):
     """
     try:
         return os.environ[var_name]
-    except KeyError as e:
-        print(50 * '-')
-        print(f'An error occured attempting to get variable environnement :\n{e}')
-        print(50 * '-')
+    except KeyError:
         raise ValueError(f'Set the {var_name} environment variable.')
+
+
+def check_environment(env):
+    """
+    Return which folder the app should focus on for the HTML render and the
+    static files.
+    """
+    if 'prod' in env:
+        return 'build'
+    return 'public'
