@@ -25,7 +25,7 @@ const show_map = (position, apiKey) => {
         width: '400px',
         height: '50vh'
     };
-    
+
     return (
         <div style={mapStyles}>
             <GoogleMapReact
