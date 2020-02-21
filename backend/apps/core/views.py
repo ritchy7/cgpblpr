@@ -14,7 +14,7 @@ from flask import (
 from flask_cors import CORS
 
 # Local imports.
-from config import ENVIRONMENT, GOOGLE_API_KEY_ID
+from config import ENVIRONMENT, GOOGLE_API_KEY_ID, STATIC_FOLDER, TEMPLATE_FOLDER
 from apps.grandpy.utils import PlaceInformations
 
 
