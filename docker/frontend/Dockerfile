@@ -1,6 +1,6 @@
 FROM node:lts
 
-VOLUME /usr/src/cgpy
+VOLUME /usr/src/app
 
 EXPOSE 3000
 

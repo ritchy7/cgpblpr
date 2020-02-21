@@ -7,20 +7,20 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./:/usr/src/cgpy
+      - ./:/usr/src/app
     environment:
         - PYTHONUNBUFFERED=1
-        - ENVIRONMENT=production
+        - ENVIRONMENT=dev
         - GOOGLE_API_KEY_ID=${GOOGLE_API_KEY_ID}
 
   frontend:
       build:
           context: ./docker/frontend
       restart: always
-      working_dir: /usr/src/cgpy
+      working_dir: /usr/src/app
       ports:
           - '3000:3000'
       volumes:
-          - ./frontend:/usr/src/cgpy
+          - ./frontend:/usr/src/app
 volumes:
     backend-data:
