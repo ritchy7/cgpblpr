@@ -2,13 +2,11 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 // Contexts
 import ConversationContext from "../Contexts/ConversationContext";
-import ApiKeyContext from "../Contexts/ApiKeyContext"
 
 
 const SendMessage = () => {
     const [message, setMessage] = useState("");
     const conversationContextValue = useContext(ConversationContext);
-    const apiKeyContextValue = useContext(ApiKeyContext)
 
     const handleChange = event => {
         // Get the written message.
@@ -46,7 +44,6 @@ const SendMessage = () => {
                             "lng": responsePosition.lng,
                             "lat": responsePosition.lat
                         }
-                        apiKeyContextValue.updateApiKey()
                     }
                     conversationContextValue.updateConversation(response);
                 }
