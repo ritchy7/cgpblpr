@@ -28,10 +28,6 @@ const Message = ({ message }) => {
             "lng": Number(position.lng.toFixed(3)),
             "lat": Number(position.lat.toFixed(3))
         }
-        const mapStyles = {
-            width: '400px',
-            height: '50vh'
-        };
 
         handleUpdateKey()
 
@@ -40,7 +36,7 @@ const Message = ({ message }) => {
         }
 
         return (
-            <div style={mapStyles}>
+            <div className="map">
                 <GoogleMapReact
                     bootstrapURLKeys={{
                         key: apiKey,

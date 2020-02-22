@@ -619,6 +619,11 @@ Landing
   color: #777;
 }
 
+.map {
+    width: 400px;
+    height: 50vh;
+}
+
 @media only screen and (max-device-width: 667px), screen and (max-width: 450px) {
   .avenue-messenger {
     z-index: 2147483001 !important;
@@ -655,6 +660,10 @@ Landing
 
   .menu .button {
     border-top-right-radius: 0;
+  }
+
+  .map {
+      width: auto;
   }
 }
 @media only screen and (min-device-width: 667px) {
