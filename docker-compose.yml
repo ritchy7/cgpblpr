@@ -10,7 +10,7 @@ services:
       - ./:/usr/src/app
     environment:
         - PYTHONUNBUFFERED=1
-        - ENVIRONMENT=prod
+        - ENVIRONMENT=dev
         - GOOGLE_API_KEY_ID=${GOOGLE_API_KEY_ID}
 
   frontend:
