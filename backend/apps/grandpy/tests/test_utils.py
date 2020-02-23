@@ -2,7 +2,7 @@ import json
 from unittest import TestCase
 
 from apps.core.views import app
-from ..utils import PlaceInformation
+from apps.core.utils import PlaceInformations
 
 
 
@@ -18,39 +18,39 @@ class BotResponseTests(TestCase):
         """
         Keep all the words.
         """
-        self.assertEqual("salut", PlaceInformation("salut").parser_killer())
-        self.assertEqual("salut+salut", PlaceInformation("SALUT SALUT").parser_killer())
-        self.assertEqual("salut+ca+grand+mere", PlaceInformation("salut ca grand mere").parser_killer())
+        self.assertEqual("salut", PlaceInformations("salut").parser_killer())
+        self.assertEqual("salut+salut", PlaceInformations("SALUT SALUT").parser_killer())
+        self.assertEqual("salut+ca+grand+mere", PlaceInformations("salut ca grand mere").parser_killer())
 
     def test_should_return_the_sentence_without_au_word(self):
         """
-        Remove "au" word
+        Remove "au" word.
         """
-        self.assertEqual("salut+garcon", PlaceInformation("salut au garcon").parser_killer())
+        self.assertEqual("salut+garcon", PlaceInformations("salut au garcon").parser_killer())
 
     def test_should_return_the_sentence_without_aucun_word(self):
         """
-        Remove "aucun" word
+        Remove "aucun" word.
         """
-        self.assertEqual("homme", PlaceInformation("aucun homme").parser_killer())
+        self.assertEqual("homme", PlaceInformations("aucun homme").parser_killer())
 
     def test_should_return_the_sentence_without_elle_etait_words(self):
         """
-        Remove "etait" word
+        Remove "etait" word.
         """
-        self.assertEqual("chiante", PlaceInformation("elle était chiante").parser_killer())
+        self.assertEqual("chiante", PlaceInformations("elle était chiante").parser_killer())
 
     def test_should_return_status_ok(self):
-        self.assertEqual("OK", PlaceInformation("salut").status)
-        self.assertEqual("OK", PlaceInformation("allee des roses").status)
+        self.assertEqual("OK", PlaceInformations("salut").status)
+        self.assertEqual("OK", PlaceInformations("allee des roses").status)
 
     def test_should_retorn_zero_results_status(self):
-        self.assertEqual("ZERO_RESULTS", PlaceInformation("je m'appel ritchy").status)
-        self.assertEqual("ZERO_RESULTS", PlaceInformation("salut j'aime bien discuter avec les robots").status)
+        self.assertEqual("ZERO_RESULTS", PlaceInformations("je m'appel ritchy").status)
+        self.assertEqual("ZERO_RESULTS", PlaceInformations("salut j'aime bien discuter avec les robots").status)
 
     def test_should_return_zero_results(self):
-        self.assertEqual("ZERO_RESULTS", PlaceInformation("je m'appel ritchy").status)
-        self.assertEqual("ZERO_RESULTS", PlaceInformation("salut j'aime bien discuter avec les robots").status)
+        self.assertEqual("ZERO_RESULTS", PlaceInformations("je m'appel ritchy").status)
+        self.assertEqual("ZERO_RESULTS", PlaceInformations("salut j'aime bien discuter avec les robots").status)
 
     def test_index(self):
         """
@@ -68,3 +68,6 @@ class BotResponseTests(TestCase):
             data=json.dumps({'message':'.'})
         )
         self.assertIn(b"Je n'ai rien trouve :-/", response.data)
+
+if __name__ == "__main__":
+    unittest.main()
