@@ -38,24 +38,12 @@ const Message = ({ message }) => {
         return (
             <div className="map">
                 <GoogleMapReact
-                    bootstrapURLKeys={{
-                        key: apiKey,
-                        language: "fr"
-                    }}
-                    options={{
-                        mapTypeControl: false,
-                        scrollwheel: false,
-                        panControl: false,
-                    }}
-
+                    bootstrapURLKeys={{ key: apiKey, language: "fr"}}
+                    options={{ mapTypeControl: false, scrollwheel: false, panControl: false }}
                     defaultCenter={center}
                     defaultZoom={15}
                 >
-                    <Marker
-                        lat={position.lat}
-                        lng={position.lng}
-
-                    />
+                    <Marker lat={position.lat} lng={position.lng} />
                 </GoogleMapReact>
             </div>
         );
