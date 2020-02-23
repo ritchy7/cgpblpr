@@ -1,6 +1,7 @@
 FROM node:lts
 
 VOLUME /usr/src/app
+VOLUME /usr/src/app/templates
 
 EXPOSE 3000
 
