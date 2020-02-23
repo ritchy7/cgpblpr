@@ -2,7 +2,7 @@ import json
 from unittest import TestCase
 
 from apps.core.views import app
-from apps.core.utils import PlaceInformations
+from apps.grandpy.utils import PlaceInformations
 
 
 
@@ -40,18 +40,6 @@ class BotResponseTests(TestCase):
         """
         self.assertEqual("chiante", PlaceInformations("elle était chiante").parser_killer())
 
-    def test_should_return_status_ok(self):
-        self.assertEqual("OK", PlaceInformations("salut").status)
-        self.assertEqual("OK", PlaceInformations("allee des roses").status)
-
-    def test_should_retorn_zero_results_status(self):
-        self.assertEqual("ZERO_RESULTS", PlaceInformations("je m'appel ritchy").status)
-        self.assertEqual("ZERO_RESULTS", PlaceInformations("salut j'aime bien discuter avec les robots").status)
-
-    def test_should_return_zero_results(self):
-        self.assertEqual("ZERO_RESULTS", PlaceInformations("je m'appel ritchy").status)
-        self.assertEqual("ZERO_RESULTS", PlaceInformations("salut j'aime bien discuter avec les robots").status)
-
     def test_index(self):
         """
         Ensure that the index set up correctly.
@@ -67,7 +55,8 @@ class BotResponseTests(TestCase):
             '/askbot',
             data=json.dumps({'message':'.'})
         )
-        self.assertIn(b"Je n'ai rien trouve :-/", response.data)
+        response = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(None, response['position'])
 
 if __name__ == "__main__":
     unittest.main()
