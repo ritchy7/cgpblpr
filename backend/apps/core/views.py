@@ -2,7 +2,6 @@
 import ast
 import time
 
-
 # Flask imports.
 from flask import (
     Flask,
