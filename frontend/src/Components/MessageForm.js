@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 // Contexts
 import ConversationContext from "../Contexts/ConversationContext";
+import LoaderContext from "../Contexts/LoaderContext"
 
 
 const SendMessage = () => {
     const [message, setMessage] = useState("");
     const conversationContextValue = useContext(ConversationContext);
+    const loaderContextValue = useContext(LoaderContext);
 
     const handleChange = event => {
         // Get the written message.
@@ -24,6 +26,8 @@ const SendMessage = () => {
             "user": "Me",
             "text": msg
         })
+        // Show the loader.
+        loaderContextValue.updateLoaderStatus('visible')
         // Send the message to Flask Background with Axios package.
         axios.post('/askbot', {
             message: msg
@@ -51,6 +55,7 @@ const SendMessage = () => {
                     "user": "GrandPY",
                     "text": responseDescription
                 });
+                loaderContextValue.updateLoaderStatus('hidden')
             })
             .catch((error) => console.log(error));
         document.querySelector('.message-input').reset();
