@@ -13,7 +13,7 @@ from flask import (
 from flask_cors import CORS
 
 # Local imports.
-from config import ENVIRONMENT, GOOGLE_API_KEY_ID, STATIC_FOLDER, TEMPLATE_FOLDER
+from config import GOOGLE_API_KEY_ID, STATIC_FOLDER, TEMPLATE_FOLDER
 from apps.grandpy.utils import PlaceInformations
 
 
@@ -29,6 +29,7 @@ CORS(app)
 def index():
     return render_template("index.html")
 
+
 @app.route('/get_google_key', methods=['GET'])
 def get_google_key():
     """
@@ -36,6 +37,7 @@ def get_google_key():
     """
     response = {"key": GOOGLE_API_KEY_ID}
     return jsonify(response)
+
 
 @app.route('/askbot', methods=['POST'])
 def ask_bot():

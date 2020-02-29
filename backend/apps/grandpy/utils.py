@@ -1,8 +1,6 @@
 import ast
 import random
 import requests
-from collections import namedtuple
-
 
 from config import GOOGLE_API_KEY_ID
 from .constants import (
@@ -14,6 +12,7 @@ from .constants import (
     STOP_WORDS,
     WIKIPEDIA_API_BASE_URL
 )
+
 
 class PlaceInformations:
 
@@ -64,7 +63,6 @@ class PlaceInformations:
         Returns
         -------
         response : dict
-            Response with 2 keys :
                 - candidates which contains the data.
                 - status which contains the status result reponse.
         """
