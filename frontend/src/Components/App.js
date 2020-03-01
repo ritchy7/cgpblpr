@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 // Components
 import Main from "./Main";
@@ -21,7 +21,7 @@ const App = () => {
     // List all of messages exchange between the human and the bot.
     const handleAdd = message => {
         // Get all messages.
-        const conv = conversation
+        const dialog = conversation
         // Add the current hour.
         moment.locale('fr');
         const current_hour = moment().format('LT');
@@ -29,9 +29,9 @@ const App = () => {
         // Add an id to the message.
         message["id"] = Math.round(Math.random() * 100000)
         // Put the message to all messages list.
-        conv.push(message)
+        dialog.push(message)
         // Replace the messages in the state.
-        setConversation([...conv])
+        setConversation([...dialog])
     };
 
     const conversationContextValue = {
@@ -39,11 +39,6 @@ const App = () => {
         updateConversation: handleAdd
     };
 
-    // Scroll into the last message.
-    useEffect(() => {
-        let last_message = document.querySelector('.message:nth-last-child(1)');
-        last_message.scrollIntoView(true)
-    });
 
     return (
         <ConversationContext.Provider value={conversationContextValue}>
