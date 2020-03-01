@@ -64,7 +64,7 @@ class PlaceInformations:
         -------
         response : dict
                 - candidates which contains the data.
-                - status which contains the status result reponse.
+                - status which contains the status result response.
         """
         # Transform the response into a dictionnary.
         response = ast.literal_eval(requests.get(url, parameters)._content.decode('utf-8'))

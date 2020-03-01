@@ -1,5 +1,6 @@
 import json
 from unittest import TestCase
+from unittest.mock import Mock
 
 from apps.core.views import app
 from apps.grandpy.utils import PlaceInformations
