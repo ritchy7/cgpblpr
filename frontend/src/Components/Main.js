@@ -33,7 +33,6 @@ const Main = () => {
     useEffect(() => {
         setTimeout(() => {
             messageEndRef.current.scrollIntoView({ behavior: 'smooth'})
-            console.log('scroll !')
         }, 100)
     })
 
