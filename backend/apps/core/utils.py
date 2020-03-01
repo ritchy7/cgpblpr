@@ -14,6 +14,10 @@ def get_env_variable(var_name):
     var_name : str
         Environment variable name.
 
+    Raises
+    ------
+    ValueError : if the environment variable doesn't exist.
+
     Returns
     -------
     : str
