@@ -134,45 +134,28 @@ Messages
   padding: 6px 10px 7px;
   border-radius: 20px 20px 20px 0;
   background: #eee;
-  /*rgba(0, 0, 0, 0.1);*/
   margin: 8px 0;
   font-size: 14px;
   line-height: 1.4;
   margin-left: 35px;
   position: relative;
   border: 1px solid #ccc;
-  /*text-shadow: 0 1px 1px rgba(0, 0, 0, .2);*/
+}
+.messages .message .timestampcheckmark {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 .messages .message .timestamp {
-  position: absolute;
-  bottom: -15px;
   font-size: 10px;
   color: #555;
-  right: 35px;
-  /* color: rgba(255, 255, 255, .7);*/
-}
-.messages .message .checkmark-sent-delivered {
-  position: absolute;
-  bottom: -15px;
-  right: 10px;
-  font-size: 12px;
-  color: #999;
+  margin-right: 5px;
 }
 .messages .message .checkmark-read {
   color: blue;
-  position: absolute;
-  bottom: -15px;
-  right: 16px;
   font-size: 12px;
 }
-.messages .message::before {
-  /*  content: '';
-    position: absolute;
-    bottom: -6px;
-    border-top: 6px solid rgba(0, 0, 0, 0.1);
-    left: 0;
-    border-right: 7px solid transparent;*/
-}
+
 .messages .message .avatar {
   position: absolute;
   z-index: 1;
@@ -270,6 +253,7 @@ Message Box
   -webkit-box-flex: 0;
           flex: 0 1 42px;
   width: 90%;
+  height: auto;
   background: #fff;
   margin: 2px auto;
   padding: 10px;

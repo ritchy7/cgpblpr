@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from "axios";
 
@@ -59,8 +59,10 @@ const Message = ({ message }) => {
             </figure>
             {map}
             {message.text}
-            <div className="timestamp">{message.hour}</div>
-            <div className="checkmark-read">✓✓</div>
+            <div className="timestampcheckmark">
+                <div className="timestamp">{message.hour}</div>
+                <div className="checkmark-read">✓✓</div>
+            </div>
         </div>
     )
 }
