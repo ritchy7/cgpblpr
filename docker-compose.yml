@@ -23,6 +23,6 @@ services:
           - '3000:3000'
       volumes:
           - ./frontend:/usr/src/app
-          - ./templates:/usr/src/app/templates
+          - ./templates:/usr/src/templates
 volumes:
     backend-data:
