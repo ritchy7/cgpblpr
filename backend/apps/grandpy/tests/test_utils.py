@@ -1,6 +1,5 @@
 import json
-from unittest import TestCase
-from unittest.mock import Mock
+from unittest import mock, TestCase
 
 from apps.core.views import app
 from apps.grandpy.utils import PlaceInformations
@@ -50,6 +49,31 @@ class BotResponseTests(TestCase):
         response = self.tester.post('/askbot', data=json.dumps({'message':'.'}))
         response = json.loads(response.data.decode('utf-8'))
         self.assertEqual(None, response['position'])
+
+    ################
+    #   Endpoints
+    ################
+    def test_test(self):
+        """
+        TODO
+        """
+        result = {
+            'results': [{
+                'geometry': {
+                    'location': {
+                        'lat': 48.8747265,
+                        'lng': 2.3505517
+                    } 
+                } 
+            }] 
+        }
+        pi = PlaceInformations('openclassrooms')
+        pi.call = mock.MagicMock(return_value=result)
+        pi.get_address()
+        self.assertEqual(pi.get_coordinates(), {
+            'lng': 2.3505517,
+            'lat': 48.8747265
+        })
 
     ################
     #   Endpoints

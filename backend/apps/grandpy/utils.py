@@ -155,7 +155,6 @@ class PlaceInformations:
                     "generator": "search",
                     "prop": "extracts",
                     "gsrsearch": page_title,
-                    # "gsrlimit": 20,
                     "exintro": 1,
                     "explaintext": 1,
                     "exchars": 800,

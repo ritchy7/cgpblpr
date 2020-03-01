@@ -35,7 +35,7 @@ const SendMessage = () => {
         // Show the loader.
         loaderContextValue.updateLoaderStatus('visible')
         // Send the message to Flask Background with Axios package.
-        axios.post('/askbot', {
+        axios.post('http://localhost:8000/askbot', {
             message: msg
         })
             .then((response) => {
