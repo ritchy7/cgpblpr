@@ -13,7 +13,12 @@ const SendMessage = () => {
 
     const handleChange = event => {
         // Get the written message.
-        const msg = event.currentTarget.value;
+        let msg = ""
+        if (event.currentTarget.value.length > 200){
+            msg = event.currentTarget.value.substring(0, 100)
+        } else {
+            msg = event.currentTarget.value
+        }
         // Put the message in the state.
         setMessage(msg);
     }
@@ -72,6 +77,7 @@ const SendMessage = () => {
                     type="text"
                     className="message-input"
                     placeholder="Ask your question..."
+                    maxLength="100"
                     required
                 />
                 <button type="submit" className="message-submit">Send</button>
