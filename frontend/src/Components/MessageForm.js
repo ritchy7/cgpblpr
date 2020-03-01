@@ -60,6 +60,7 @@ const SendMessage = () => {
             })
             .catch((error) => console.log(error));
         inputRef.current.value = ''
+        inputRef.current.focus()
     }
 
     return (
