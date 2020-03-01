@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import ReactLoading from "react-loading";
 // Components
 import Message from "./Message";
@@ -14,6 +14,7 @@ const Main = () => {
         loaderStatus: loaderStatus,
         updateLoaderStatus: setLoaderStatus
     };
+    const messageEndRef = useRef(null)
     const styles = {
         loader: {
             visibility: loaderStatus,
@@ -28,6 +29,13 @@ const Main = () => {
             borderRadius: '20px'
         }
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            messageEndRef.current.scrollIntoView({ behavior: 'smooth'})
+            console.log('scroll !')
+        }, 100)
+    })
 
     return (
         <LoaderContext.Provider value={loaderContextValue}>
@@ -57,6 +65,7 @@ const Main = () => {
                                 (message) => <Message key={message.id} message={message} />
                             )
                         }
+                        <div ref={messageEndRef} className="message" style={{ marginBottom: "0px", visibility: "hidden"}} />
                     </div>
                     <MessageForm />
                 </div>
