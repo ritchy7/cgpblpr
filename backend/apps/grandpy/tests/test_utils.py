@@ -64,8 +64,9 @@ class BotResponseTests(TestCase):
                         'lat': 48.8747265,
                         'lng': 2.3505517
                     } 
-                } 
-            }] 
+                }
+            }],
+            'status': 'OK'
         }
         pi = PlaceInformations('openclassrooms')
         pi.call = mock.MagicMock(return_value=result)
