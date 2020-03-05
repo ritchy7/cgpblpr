@@ -20,27 +20,27 @@ class BotResponseTests(TestCase):
         """
         Keep all the words.
         """
-        self.assertEqual("salut", PlaceInformations("salut").parser_killer())
-        self.assertEqual("salut+salut", PlaceInformations("SALUT SALUT").parser_killer())
-        self.assertEqual("salut+ca+grand+mere", PlaceInformations("salut ca grand mere").parser_killer())
+        self.assertEqual("salut", PlaceInformations("salut")._parsed_input_message)
+        self.assertEqual("salut+salut", PlaceInformations("SALUT SALUT")._parsed_input_message)
+        self.assertEqual("salut+ca+grand+mere", PlaceInformations("salut ca grand mere")._parsed_input_message)
 
     def test_should_return_the_sentence_without_au_word(self):
         """
         Remove "au" word.
         """
-        self.assertEqual("salut+garcon", PlaceInformations("salut au garcon").parser_killer())
+        self.assertEqual("salut+garcon", PlaceInformations("salut au garcon")._parsed_input_message)
 
     def test_should_return_the_sentence_without_aucun_word(self):
         """
         Remove "aucun" word.
         """
-        self.assertEqual("homme", PlaceInformations("aucun homme").parser_killer())
+        self.assertEqual("homme", PlaceInformations("aucun homme")._parsed_input_message)
 
     def test_should_return_the_sentence_without_elle_etait_words(self):
         """
         Remove "elle était" word.
         """
-        self.assertEqual("chiante", PlaceInformations("elle était chiante").parser_killer())
+        self.assertEqual("chiante", PlaceInformations("elle était chiante")._parsed_input_message)
 
     def test_should_not_return_position(self):
         """
@@ -50,14 +50,15 @@ class BotResponseTests(TestCase):
         response = json.loads(response.data.decode('utf-8'))
         self.assertEqual(None, response['position'])
 
-    ################
-    #   Endpoints
-    ################
-    def test_test(self):
+    ###############
+    #  Methods
+    ###############
+    def test_get_coordinates(self):
         """
-        TODO
+        Test the get coordinates method it should return a dictionnary with
+        2 keys lng and lat.
         """
-        result = {
+        patched_coordinates_result = {
             'results': [{
                 'geometry': {
                     'location': {
@@ -68,13 +69,34 @@ class BotResponseTests(TestCase):
             }],
             'status': 'OK'
         }
-        pi = PlaceInformations('openclassrooms')
-        pi.call = mock.MagicMock(return_value=result)
+        patched_address_result = {
+            'candidates': [{
+                'formatted_address': '7 Cité Paradis, 75010 Paris, France'
+            }],
+            'status': 'OK'
+        }
+        pi = PlaceInformations('openclassrooms ?')
+        pi.call = mock.MagicMock(return_value=patched_address_result)
         pi.get_address()
+        pi.call = mock.MagicMock(return_value=patched_coordinates_result)
         self.assertEqual(pi.get_coordinates(), {
-            'lng': 2.3505517,
-            'lat': 48.8747265
+            'lat': 48.8747265,
+            'lng': 2.3505517
         })
+
+    def test_get_address(self):
+        """
+        Test the get address method it should return a string with the address.
+        """
+        patched_address_result = {
+            'candidates': [{
+                'formatted_address': '7 Cité Paradis, 75010 Paris, France'
+            }],
+            'status': 'OK'
+        }
+        pi = PlaceInformations('openclassrooms ?')
+        pi.call = mock.MagicMock(return_value=patched_address_result)
+        self.assertEqual(pi.get_address(), '7 Cité Paradis, 75010 Paris, France')
 
     ################
     #   Endpoints
