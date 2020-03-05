@@ -22,9 +22,28 @@ class PlaceInformations:
         self._description = None
         self._response = None
         self._sentence = sentence
-        self._parsed_input_message = self.parser_killer()
+        self._parsed_input_message = self.sentence_parser()
 
-    def parser_killer(self):
+
+    def get_address(self):
+        """
+        """
+        self.retrieve_address()
+        return self._address
+
+    def get_coordinates(self):
+        """
+        """
+        self.retrieve_coordinates()
+        return self._coordinates
+    
+    def get_description(self):
+        """
+        """
+        self.retrieve_coordinates()
+        return self._description
+
+    def sentence_parser(self):
         """
         Parse the sentence given in parameter to get only the important words
 
@@ -51,6 +70,10 @@ class PlaceInformations:
     def call(self, url, parameters):
         """
         Make a API Call to the url and with the parameters given.
+        Put in _response attribute the json result of the api call.
+        Exemple :
+            - candidates which contains the data.
+            - status which contains the status result response.
 
         Parameters
         ----------
@@ -58,30 +81,20 @@ class PlaceInformations:
             URL where the api call will be sent.
 
         parameters: dict
-            Parameters to get an accurate result.
+            Parameters to get an accurate result. 
 
         Returns
         -------
-        response : dict
-                - candidates which contains the data.
-                - status which contains the status result response.
+        : json
+            Response.   
         """
-        # Transform the response into a dictionnary.
-        response = ast.literal_eval(requests.get(url, parameters)._content.decode('utf-8'))
-        self._response = response
-        return response
+        return requests.get(url, parameters).json()
 
-    def get_address(self):
+    def retrieve_address(self):
         """
-        Get an address from a sentence if there are no result remove each word
-        one by one and try to get a result.
-
-        Returns
-        -------
-        response : str
-            Formatted address or empty result.
+        Retrieve an address from a sentence if there are no result remove each
+        of 5 first words one by one and try to get a result.
         """
-        url = GOOGLE_API_BASE_URL_FIND_PLACE
         parameters = {
             'key': GOOGLE_API_KEY_ID,
             'input': self._parsed_input_message,
@@ -89,20 +102,26 @@ class PlaceInformations:
             'fields': 'formatted_address'
         }
         input_message = self._parsed_input_message.split('+')
-        word_counter = 1
-        # Iterate on the sentence
-        while self.call(url, parameters)['status'] == 'ZERO_RESULTS' and word_counter <= len(input_message) / 2:
-            parameters['input'] = '+'.join(input_message[word_counter:])
-            word_counter += 1
-        if self._response['status'] != 'OK':
+        word_counter = 5
+        # Iterate on the sentence to get a result.
+        while True:
+            response = self.call(GOOGLE_API_BASE_URL_FIND_PLACE, parameters)
+            if response['status'] == 'ZERO_RESULTS' and word_counter:
+                parameters['input'] = '+'.join(input_message[word_counter:])
+                word_counter -= 1
+            else:
+                break
+        # If there is no convincing result.
+        if response.get('status') != 'OK':
             return None
         else:
-            self._address = self._response['candidates'][0]['formatted_address']
-        return self._address
+            self._address = response\
+                            .get('candidates')[0]\
+                            .get('formatted_address')
 
-    def get_coordinates(self):
+    def retrieve_coordinates(self):
         """
-        Get the coordinates for an address (latidute, longitude).
+        Retrieve the coordinates for an address (latidute, longitude).
         """
         if not self._address:
             return None
@@ -110,18 +129,18 @@ class PlaceInformations:
             'key': GOOGLE_API_KEY_ID,
             'address': self._address
         }
-        self.call(GOOGLE_API_BASE_URL_GET_COORDINATES, parameters)
+        response = self.call(GOOGLE_API_BASE_URL_GET_COORDINATES, parameters)
+        response = response.get('results')[0]['geometry']['location']
         # Get the coordinates.
-        coordinates = self._response['results'][0]['geometry']['location']
-        self._coordinates = {
-            'lng': coordinates['lng'],
-            'lat': coordinates['lat']
+        coordinates = {
+            'lng': response['lng'],
+            'lat': response['lat']
         }
-        return self._coordinates
+        self._coordinates = coordinates
 
-    def get_description(self):
+    def retrieve_description(self):
         """
-        Get the description of an address.
+        retrieve the description of an address.
         """
         if not self._coordinates:
             return random.choice(NO_FOUND_SENTENCE)
@@ -137,11 +156,11 @@ class PlaceInformations:
         }
         response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
         # If there are founded pages.
-        coord = f"{self._coordinates['lat']}|{self._coordinates['lng']}"
+        coord = f"{self.get_coordinates()['lat']}|{self.get_coordinates()['lng']}"
         if response['query']['geosearch']:
             # Take the good page.
-            address = self._address.replace('-', ' ')
-            for obj in response['query']['geosearch']:
+            address = self.get_address().replace('-', ' ')
+            for obj in response.get('query')['geosearch']:
                 obj_title = obj['title'].replace('-', ' ')
                 if obj_title in address:
                     page_title = obj['title']
@@ -170,4 +189,3 @@ class PlaceInformations:
             self._description = random.choice(NO_ANECDOTE_SENTENCE)
         else:
             self._description = random.choice(NO_FOUND_SENTENCE)
-        return self._description
