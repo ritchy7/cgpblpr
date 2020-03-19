@@ -24,23 +24,87 @@ class PlaceInformations:
         self._sentence = sentence
         self._parsed_input_message = self.sentence_parser()
 
+    def call(self, url, parameters):
+        """
+        Make a API Call to the url and with the parameters given.
+        Put in _response attribute the json result of the api call.
+        Exemple :
+            - candidates which contains the data.
+            - status which contains the status result response.
+
+        Parameters
+        ----------
+        url : str
+            URL where the api call will be sent.
+
+        parameters: dict
+            Parameters to get an accurate result.
+
+        Returns
+        -------
+        : json
+            Response.
+        """
+        return requests.get(url, parameters).json()
+
+    @staticmethod
+    def get_good_page(response, address):
+        """
+        Retrieve the good page from an address given.
+
+        Parameters
+        ----------
+        response : json
+            Http response of the previous API call which consisted in having all pages
+            within a radius of 100 meters from a given geographic coordinate.
+        address : str
+            Address on which we'll look for the good page.
+
+        Returns
+        -------
+        : tuple
+            page_title : str
+                Page title.
+            page_id : int
+                Page identifer.
+        """
+        page_title = None
+        page_id = None
+        address = address.replace('-', ' ')
+        places = response['query']['geosearch']
+        # Iterate on each proposed page to get the good page title and number.
+        for obj_counter, obj in enumerate(places):
+            if page_title and page_id:
+                break
+            # Get the object.
+            obj = places[obj_counter]
+            obj_title = obj['title']
+            obj_page_id = obj['pageid']
+            # Check if the object title is in the address
+            if obj_title.replace('-', ' ') in address:
+                page_title = obj_title
+                page_id = obj_page_id
+        return page_title, page_id
 
     def get_address(self):
         """
+        Return an address from a sentence.
         """
         self.retrieve_address()
         return self._address
 
     def get_coordinates(self):
         """
+        Return the coordinates from an address.
         """
         self.retrieve_coordinates()
         return self._coordinates
     
     def get_description(self):
         """
+        Return the description from a coordinate.
         """
-        self.retrieve_coordinates()
+        self.retrieve_description()
         return self._description
 
     def sentence_parser(self):
@@ -67,28 +131,50 @@ class PlaceInformations:
 
         return structured_sentence
 
-    def call(self, url, parameters):
+    def make_description(self):
         """
-        Make a API Call to the url and with the parameters given.
-        Put in _response attribute the json result of the api call.
-        Exemple :
-            - candidates which contains the data.
-            - status which contains the status result response.
+        Make up the description according the result.
+        """
+        if self._description:
+            self._description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + ': ' + self._description
+        elif not self._description and self._address:
+            self._description = random.choice(NO_ANECDOTE_SENTENCE)
+        else:
+            self._description = random.choice(NO_FOUND_SENTENCE)
+
+    def get_summary(self, page_title, page_id):
+        """
+        Get the summary of a page from his page title and number.
 
         Parameters
         ----------
-        url : str
-            URL where the api call will be sent.
-
-        parameters: dict
-            Parameters to get an accurate result. 
-
+        page_title : str
+            Page title.
+        page_id : int
+            Page identifer.
+ 
         Returns
         -------
-        : json
-            Response.   
+        description : json
+            Summary of the page.
         """
-        return requests.get(url, parameters).json()
+        parameters = {
+            "format": "json",
+            "origin": "*",
+            "generator": "search",
+            "prop": "extracts",
+            "gsrsearch": page_title,
+            "exintro": 1,
+            "explaintext": 1,
+            "exchars": 800,
+            "exlimit": 20,
+            "action": 'query'
+        }
+        response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
+        print(123456)
+        description = response['query']['pages'][str(page_id)]['extract']
+
+        return description
 
     def retrieve_address(self):
         """
@@ -102,20 +188,16 @@ class PlaceInformations:
             'fields': 'formatted_address'
         }
         input_message = self._parsed_input_message.split('+')
-        word_counter = 5
         # Iterate on the sentence to get a result.
-        while True:
+        for word_counter in range(1, len(input_message) + 1):
             response = self.call(GOOGLE_API_BASE_URL_FIND_PLACE, parameters)
-            if response['status'] == 'ZERO_RESULTS' and word_counter:
-                parameters['input'] = '+'.join(input_message[word_counter:])
-                word_counter -= 1
-            else:
+            if response.get('status') != 'ZERO_RESULTS' or word_counter > 10:
                 break
+            parameters['input'] = '+'.join(input_message[word_counter:])
         # If there is no convincing result.
         if response.get('status') != 'OK':
             return None
-        else:
-            self._address = response\
+        self._address = response\
                             .get('candidates')[0]\
                             .get('formatted_address')
 
@@ -143,49 +225,26 @@ class PlaceInformations:
         retrieve the description of an address.
         """
         if not self._coordinates:
-            return random.choice(NO_FOUND_SENTENCE)
-        page_title = None
-        page_id = None
+            self._description = random.choice(NO_FOUND_SENTENCE)
+            return None
+
+        coord = f"{self._coordinates['lat']}|{self._coordinates['lng']}"
         parameters = {
             "format": "json",
             "action": 'query',
             "list": "geosearch",
-            "gsradius": 10000,
+            "gsradius": 100,
             "gslimit": 10,
-            "gscoord": f"{self._coordinates['lat']}|{self._coordinates['lng']}"
+            "gscoord": coord
         }
         response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
         # If there are founded pages.
-        coord = f"{self.get_coordinates()['lat']}|{self.get_coordinates()['lng']}"
         if response['query']['geosearch']:
             # Take the good page.
-            address = self.get_address().replace('-', ' ')
-            for obj in response.get('query')['geosearch']:
-                obj_title = obj['title'].replace('-', ' ')
-                if obj_title in address:
-                    page_title = obj['title']
-                    page_id = obj['pageid']
-                    break
+            page_title, page_id = self.get_good_page(response=response, address=self._address)
             # Get the summary from the page.
             if page_title and page_id:
-                parameters = {
-                    "format": "json",
-                    "origin": "*",
-                    "generator": "search",
-                    "prop": "extracts",
-                    "gsrsearch": page_title,
-                    "exintro": 1,
-                    "explaintext": 1,
-                    "exchars": 800,
-                    "exlimit": 20,
-                    "action": 'query'
-                }
-                response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
-                self._description = response['query']['pages'][str(page_id)]['extract']
-
-        if self._description:
-            self._description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + ' ' + self._description
-        elif not self._description and self._address:
-            self._description = random.choice(NO_ANECDOTE_SENTENCE)
-        else:
-            self._description = random.choice(NO_FOUND_SENTENCE)
+                description = self.get_summary(page_title, page_id)
+                self._description = description
+        # Make up the description according the result.
+        self.make_description()
