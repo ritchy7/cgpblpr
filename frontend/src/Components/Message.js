@@ -7,7 +7,7 @@ const Message = ({ message }) => {
     const [apiKey, setApiKey] = useState(null)
 
     const handleUpdateKey = () => {
-        axios.get('http://localhost:8000/get_google_key')
+        axios.get('/get_google_key')
         .then((response) => setApiKey(response.data.key))
         .catch((error) => console.log(error))
     }
