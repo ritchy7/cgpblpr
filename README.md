@@ -4,6 +4,7 @@ It's a school project named "Create grandpy bot the grandpa robot".
 
 Requirements :
 - Python 3.6+
+- Docker (latest)
 
 EN (Soon):
 ...
