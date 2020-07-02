@@ -55,8 +55,10 @@ class PlaceInformations:
         Parameters
         ----------
         response : json
-            Http response of the previous API call which consisted in having all pages
-            within a radius of 100 meters from a given geographic coordinate.
+            Http response of the previous API call which consisted in
+            having all pages
+            within a radius of 100 meters from a given geographic
+            coordinate.
         address : str
             Address on which we'll look for the good page.
 
@@ -99,7 +101,7 @@ class PlaceInformations:
         """
         self.retrieve_coordinates()
         return self._coordinates
-    
+
     def get_description(self):
         """
         Return the description from a coordinate.
@@ -136,7 +138,7 @@ class PlaceInformations:
         Make up the description according the result.
         """
         if self._description:
-            self._description = random.choice(DESCRIPTION_DEBUT_SENTENCE) + ': ' + self._description
+            self._description = f"{random.choice(DESCRIPTION_DEBUT_SENTENCE)}: {self._description}"
         elif not self._description and self._address:
             self._description = random.choice(NO_ANECDOTE_SENTENCE)
         else:
@@ -152,7 +154,7 @@ class PlaceInformations:
             Page title.
         page_id : int
             Page identifer.
- 
+
         Returns
         -------
         description : json
@@ -171,7 +173,6 @@ class PlaceInformations:
             "action": 'query'
         }
         response = self.call(WIKIPEDIA_API_BASE_URL, parameters)
-        print(123456)
         description = response['query']['pages'][str(page_id)]['extract']
 
         return description
@@ -241,7 +242,9 @@ class PlaceInformations:
         # If there are founded pages.
         if response['query']['geosearch']:
             # Take the good page.
-            page_title, page_id = self.get_good_page(response=response, address=self._address)
+            page_title, page_id = self.get_good_page(
+                response=response, address=self._address
+            )
             # Get the summary from the page.
             if page_title and page_id:
                 description = self.get_summary(page_title, page_id)
