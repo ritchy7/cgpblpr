@@ -61,7 +61,7 @@ class BotResponseTests(TestCase):
 
     def test_should_not_return_position(self):
         """
-        Ensure that the askbot return salut.
+        Ensure that the askbot return nothing.
         """
         response = self.tester.post(
             '/askbot', data=json.dumps({'message': ''})
