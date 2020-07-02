@@ -20,33 +20,52 @@ class BotResponseTests(TestCase):
         """
         Keep all the words.
         """
-        self.assertEqual("salut", PlaceInformations("salut")._parsed_input_message)
-        self.assertEqual("salut+salut", PlaceInformations("SALUT SALUT")._parsed_input_message)
-        self.assertEqual("salut+ca+grand+mere", PlaceInformations("salut ca grand mere")._parsed_input_message)
+        self.assertEqual(
+            "salut",
+            PlaceInformations("salut")._parsed_input_message
+        )
+        self.assertEqual(
+            "salut+salut",
+            PlaceInformations("SALUT SALUT")._parsed_input_message
+        )
+        self.assertEqual(
+            "salut+ca+grand+mere",
+            PlaceInformations("salut ca grand mere")._parsed_input_message
+        )
 
     def test_should_return_the_sentence_without_au_word(self):
         """
         Remove "au" word.
         """
-        self.assertEqual("salut+garcon", PlaceInformations("salut au garcon")._parsed_input_message)
+        self.assertEqual(
+            "salut+garcon",
+            PlaceInformations("salut au garcon")._parsed_input_message
+        )
 
     def test_should_return_the_sentence_without_aucun_word(self):
         """
         Remove "aucun" word.
         """
-        self.assertEqual("homme", PlaceInformations("aucun homme")._parsed_input_message)
+        self.assertEqual(
+            "homme", PlaceInformations("aucun homme")._parsed_input_message
+        )
 
     def test_should_return_the_sentence_without_elle_etait_words(self):
         """
         Remove "elle était" word.
         """
-        self.assertEqual("chiante", PlaceInformations("elle était chiante")._parsed_input_message)
+        self.assertEqual(
+            "chiante",
+            PlaceInformations("elle était chiante")._parsed_input_message
+        )
 
     def test_should_not_return_position(self):
         """
         Ensure that the askbot return salut.
         """
-        response = self.tester.post('/askbot', data=json.dumps({'message':''}))
+        response = self.tester.post(
+            '/askbot', data=json.dumps({'message': ''})
+        )
         response = json.loads(response.data.decode('utf-8'))
         self.assertEqual(None, response['position'])
 
@@ -96,7 +115,9 @@ class BotResponseTests(TestCase):
         }
         pi = PlaceInformations("Salut GrandPy ! Est-ce que tu connais l'adresse d'OpenClassrooms ?")
         pi.call = mock.MagicMock(return_value=patched_address_result)
-        self.assertEqual(pi.get_address(), '7 Cité Paradis, 75010 Paris, France')
+        self.assertEqual(
+            pi.get_address(), '7 Cité Paradis, 75010 Paris, France'
+        )
 
     def test_get_description(self):
         """
@@ -176,24 +197,28 @@ class BotResponseTests(TestCase):
         response = self.tester.get('/get_google_key', content_type='html/txt')
         response = json.loads(response.data.decode('utf-8'))
         self.assertIsInstance(response['key'], str)
-    
+
     def test_error_404(self):
         """
         Ensure that the 404 error is returned.
         """
-        response = self.tester.get('/page_that_not_exists', content_type='html/txt')
+        response = self.tester.get(
+            '/page_that_not_exists', content_type='html/txt'
+        )
         self.assertEqual(response.status_code, 404)
-        
+
     def test_method_allowed(self):
         """
+        Check method not allowed.
         """
         endpoints = ['/', '/get_google_key', '/askbot']
         for endpoint in endpoints:
             if endpoint == '/askbot':
-                response = self.tester.get(endpoint, content_type='html/txt')
+                response = self.tester.delete(endpoint)
             else:
                 response = self.tester.post(endpoint)
-            self.assertNotEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 405)
+
 
 if __name__ == "__main__":
     unittest.main()
