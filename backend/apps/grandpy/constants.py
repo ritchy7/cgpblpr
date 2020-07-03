@@ -6,7 +6,7 @@ DESCRIPTION_DEBUT_SENTENCE = (
     "Plus jeune on m'a dit qu'ici",
     "Ah oui, la base ! Pas très loin",
     "En maternelle j'ai appris que par la"
- )
+)
 
 NO_FOUND_SENTENCE = (
     "Purée j'ai rien trouvé ! Soit on parle pas la même langue soit je suis trop vieux.",
