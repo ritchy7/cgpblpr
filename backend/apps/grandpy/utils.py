@@ -1,4 +1,3 @@
-import ast
 import random
 import requests
 
@@ -179,8 +178,8 @@ class PlaceInformations:
 
     def retrieve_address(self):
         """
-        Retrieve an address from a sentence if there are no result remove each
-        of 5 first words one by one and try to get a result.
+        Retrieve an address from a sentence if there are no result
+        remove each of 5 first words one by one and try to get a result.
         """
         parameters = {
             'key': GOOGLE_API_KEY_ID,
@@ -198,9 +197,7 @@ class PlaceInformations:
         # If there is no convincing result.
         if response.get('status') != 'OK':
             return None
-        self._address = response\
-                            .get('candidates')[0]\
-                            .get('formatted_address')
+        self._address = response.get('candidates')[0].get('formatted_address')
 
     def retrieve_coordinates(self):
         """
