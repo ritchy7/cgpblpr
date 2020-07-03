@@ -31,6 +31,7 @@ class BotResponseTests(TestCase):
         self.assertEqual(
             "ca+carte+bon",
             PlaceInformations("ca carte bon")._parsed_input_message
+        )
 
     def test_should_return_the_sentence_without_au_word(self):
         """
