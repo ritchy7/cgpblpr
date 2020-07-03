@@ -1,5 +1,4 @@
 # Standard imports.
-import ast
 import time
 
 # Flask imports.
